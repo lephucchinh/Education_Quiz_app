@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/widgets.dart';
 
 part 'quiz_screen_event.dart';
 
@@ -14,6 +15,8 @@ class QuizScreenBloc extends Bloc<QuizScreenEvent, QuizScreenState> {
     on<TimerLoader>(_onTimerLoader);
     on<ProgressQuestionsIncrease>(_onProgressQuestionsIncrease);
     on<ProgressQuestionsReset>(_onProgressQuestionsReset);
+    on<ChooseOption>(_onChooseOption);
+    on<ResetChooseOption>(_onResetChooseOption);
   }
 
 ///////////////////////////////////////////////////
@@ -22,21 +25,23 @@ class QuizScreenBloc extends Bloc<QuizScreenEvent, QuizScreenState> {
   double progressTime = 0;
   int time = 0;
   int millisecond = 0;
-  int progressQuestion = 1;
+  int progressQuestion = 0;
+  int numberChoose = 0;
 
+  //////////////////////////////////////////////////
 
-  /////////////////////////////////////////////////
   _onStartTimer(StartTimer event, Emitter<QuizScreenState> emit) {
-    _timer = Timer.periodic(Duration(milliseconds: 10), (timer) {
+    _timer = Timer.periodic(Duration(milliseconds: 100), (timer) {
       if (progressTime < 1) {
         add(TimerLoader(
           time: time,
           progressTime: progressTime,
         ));
-        progressTime += 0.0002;
-        millisecond += 10;
-        if (millisecond % 1000 == 0) {
+        progressTime += 0.002;
+        millisecond += 100;
+        if (millisecond >= 1000) {
           time += 1;
+          millisecond = 0;
           add(TimerLoader(
             time: time,
             progressTime: progressTime,
@@ -57,17 +62,34 @@ class QuizScreenBloc extends Bloc<QuizScreenEvent, QuizScreenState> {
   _onProgressQuestionsIncrease(
       ProgressQuestionsIncrease event, Emitter<QuizScreenState> emit) {
     progressQuestion += 1;
-     print('$progressQuestion');
+    print('$progressQuestion');
     emit(state.copyWith(progressQuestion: progressQuestion));
   }
 
-  _onProgressQuestionsReset(ProgressQuestionsReset event, Emitter<QuizScreenState> emit) {
-    progressQuestion  = 1;
+  _onProgressQuestionsReset(
+      ProgressQuestionsReset event, Emitter<QuizScreenState> emit) {
+    progressQuestion = 0;
     emit(state.copyWith(progressQuestion: progressQuestion));
   }
-
 
   _onTimerLoader(TimerLoader event, Emitter<QuizScreenState> emit) {
     emit(state.copyWith(time: event.time, progressTime: event.progressTime));
+  }
+
+  _onChooseOption(ChooseOption event, Emitter<QuizScreenState> emit) {
+    if (numberChoose == progressQuestion) {
+      numberChoose += 1;
+      emit(
+        state.copyWith(
+            numberChoose: numberChoose,
+            idOptionChoose: event.indexChoose,
+            idAnswer: event.indexAnswer),
+      );
+    }
+  }
+
+  _onResetChooseOption(ResetChooseOption event, Emitter<QuizScreenState> emit) {
+    numberChoose = 0;
+    emit(state.copyWith(numberChoose: numberChoose));
   }
 }

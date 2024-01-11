@@ -27,7 +27,7 @@ class _OptionsListState extends State<OptionsList> {
             itemCount: 4,
             physics: NeverScrollableScrollPhysics(),
             itemBuilder: (BuildContext context, int index) {
-              return OptionCard(size: size);
+              return OptionCard(size: size, index: index,);
             },
           ),
         );

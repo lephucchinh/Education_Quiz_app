@@ -32,5 +32,19 @@ class ProgressQuestionsIncrease extends QuizScreenEvent {
 class ProgressQuestionsReset extends QuizScreenEvent {
   @override
   List<Object?> get props => [];
+}
+
+class ChooseOption extends QuizScreenEvent {
+  const ChooseOption({required this.indexAnswer,required this.indexChoose});
+  final int indexChoose;
+  final int indexAnswer;
+  @override
+  List<Object?> get props => [indexAnswer,indexChoose];
 
 }
+
+class ResetChooseOption extends QuizScreenEvent {
+  @override
+  List<Object?> get props => [];
+}
+

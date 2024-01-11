@@ -28,24 +28,20 @@ class ListCardSubjects extends StatelessWidget {
               text: 'Chemistry',
               image: 'assets/icons/icons8-chemistry-50.png',
               press: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (_) => QuizScreen()));
               },
             ),
             Subjects(
               text: 'English',
               image: 'assets/icons/icons8-english-100.png',
               press: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (_) => QuizScreen()));
+
               },
             ),
             Subjects(
               text: 'Physics',
               image: 'assets/icons/icons8-physics-100.png',
               press: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (_) => QuizScreen()));
+
               },
             ),
           ],
