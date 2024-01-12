@@ -9,6 +9,7 @@ class QuizScreenState extends Equatable {
     required this.progressTime,
     required this.time,
     required this.score,
+    required this.choose,
   });
 
   const QuizScreenState.initial({
@@ -19,6 +20,7 @@ class QuizScreenState extends Equatable {
     this.progressTime = 0.0,
     this.time = 0,
     this.score = 0,
+    this.choose = false,
   });
 
   final int time;
@@ -28,6 +30,7 @@ class QuizScreenState extends Equatable {
   final int idAnswer;
   final int numberChoose;
   final int score;
+  final bool choose;
 
   QuizScreenState copyWith({
     int? time,
@@ -37,6 +40,7 @@ class QuizScreenState extends Equatable {
     int? idAnswer,
     int? numberChoose,
     int? score,
+    bool? choose,
   }) {
     return QuizScreenState._(
         time: time ?? this.time,
@@ -45,7 +49,8 @@ class QuizScreenState extends Equatable {
         idOptionChoose: idOptionChoose ?? this.idOptionChoose,
         idAnswer: idAnswer ?? this.idAnswer,
         numberChoose: numberChoose ?? this.numberChoose,
-        score: score ?? this.score);
+        score: score ?? this.score,
+        choose: choose ?? this.choose);
   }
 
   @override
@@ -57,5 +62,6 @@ class QuizScreenState extends Equatable {
         idOptionChoose,
         numberChoose,
         score,
+        choose,
       ];
 }

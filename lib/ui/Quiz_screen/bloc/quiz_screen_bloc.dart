@@ -19,6 +19,7 @@ class QuizScreenBloc extends Bloc<QuizScreenEvent, QuizScreenState> {
     on<ResetChooseOption>(_onResetChooseOption);
     on<CountScore>(_onCountScore);
     on<ResetScore>(_onResetScore);
+    on<ChooseNext>(_onChooseNext);
   }
 
 ///////////////////////////////////////////////////
@@ -84,9 +85,11 @@ class QuizScreenBloc extends Bloc<QuizScreenEvent, QuizScreenState> {
       numberChoose += 1;
       emit(
         state.copyWith(
-            numberChoose: numberChoose,
-            idOptionChoose: event.indexChoose,
-            idAnswer: event.indexAnswer),
+          numberChoose: numberChoose,
+          idOptionChoose: event.indexChoose,
+          idAnswer: event.indexAnswer,
+          choose: true,
+        ),
       );
       if (state.idAnswer == state.idOptionChoose) {
         add(CountScore());
@@ -97,6 +100,10 @@ class QuizScreenBloc extends Bloc<QuizScreenEvent, QuizScreenState> {
   _onResetChooseOption(ResetChooseOption event, Emitter<QuizScreenState> emit) {
     numberChoose = 0;
     emit(state.copyWith(numberChoose: numberChoose));
+  }
+
+  _onChooseNext(ChooseNext event , Emitter<QuizScreenState> emit) {
+    emit(state.copyWith(choose: false));
   }
 
   _onCountScore(CountScore event, Emitter<QuizScreenState> emit) {

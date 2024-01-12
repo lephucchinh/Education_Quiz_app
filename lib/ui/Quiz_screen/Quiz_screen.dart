@@ -75,45 +75,49 @@ class _QuizScreenState extends State<QuizScreen> {
                 OptionsList(),
                 BlocBuilder<QuizScreenBloc, QuizScreenState>(
                   builder: (context, state) {
-                    return GestureDetector(
-                      onTap: () {
-                        if (state.progressQuestion + 1 == sample_data.length) {
-                          context
-                              .read<QuizScreenBloc>()
-                              .add(ResetChooseOption());
-                          context
-                              .read<QuizScreenBloc>()
-                              .add(ProgressQuestionsReset());
-                          context.read<QuizScreenBloc>().add(StopTimer());
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(builder: (_) => ResultScreen()),
-                            (route) => false,
-                          );
-                        }
-                        setState(() {
-                          context
-                              .read<QuizScreenBloc>()
-                              .add(ProgressQuestionsIncrease());
-                        });
-                      },
-                      child: Container(
-                        width: size.width * 0.85,
-                        height: 55,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          color: Colors.cyan,
+                    return Visibility(
+                      visible: state.choose,
+                      child: GestureDetector(
+                        onTap: () {
+                          if (state.progressQuestion + 1 == sample_data.length) {
+                            context
+                                .read<QuizScreenBloc>()
+                                .add(ResetChooseOption());
+                            context
+                                .read<QuizScreenBloc>()
+                                .add(ProgressQuestionsReset());
+                            context.read<QuizScreenBloc>().add(StopTimer());
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(builder: (_) => ResultScreen()),
+                              (route) => false,
+                            );
+                          }
+                          setState(() {
+                            context.read<QuizScreenBloc>().add(ChooseNext());
+                            context
+                                .read<QuizScreenBloc>()
+                                .add(ProgressQuestionsIncrease());
+                          });
+                        },
+                        child: Container(
+                          width: size.width * 0.85,
+                          height: 55,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: Colors.cyan,
+                          ),
+                          child: Center(
+                              child: Text(
+                            (state.progressQuestion + 1 == sample_data.length)
+                                ? 'End'
+                                : 'Next',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 19),
+                          )),
                         ),
-                        child: Center(
-                            child: Text(
-                          (state.progressQuestion + 1 == sample_data.length)
-                              ? 'End'
-                              : 'Next',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 19),
-                        )),
                       ),
                     );
                   },
