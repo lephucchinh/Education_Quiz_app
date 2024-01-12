@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quizgames/models/Questions.dart';
 import 'package:quizgames/ui/Quiz_screen/bloc/quiz_screen_bloc.dart';
+import 'package:quizgames/ui/Result_creen/Result_Screen.dart';
 
 class ProgressBar extends StatefulWidget {
   const ProgressBar({
@@ -33,7 +34,10 @@ class _ProgressBarState extends State<ProgressBar> {
           width: size.width * 0.8,
           height: 35,
           decoration: BoxDecoration(
-              border: Border.all(color: Colors.black12,width: 2,),
+              border: Border.all(
+                color: Colors.black12,
+                width: 2,
+              ),
               borderRadius: BorderRadius.circular(20)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -50,7 +54,6 @@ class _ProgressBarState extends State<ProgressBar> {
                 height: 10,
                 child: LinearProgressIndicator(
                   minHeight: 10,
-
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.amber),
                   backgroundColor: Colors.grey,
                   value: (state.progressQuestion + 1) / sample_data.length,

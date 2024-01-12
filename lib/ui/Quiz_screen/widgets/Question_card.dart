@@ -13,19 +13,9 @@ class QuestionCard extends StatefulWidget {
 }
 
 class _QuestionCardState extends State<QuestionCard> {
-  @override
   void initState() {
-    super.initState();
     context.read<QuizScreenBloc>().add(StartTimer());
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    var time = context
-        .read<QuizScreenBloc>()
-        .state
-        .time;
+    super.initState();
   }
 
   @override
@@ -35,9 +25,7 @@ class _QuestionCardState extends State<QuestionCard> {
   }
 
   Widget build(BuildContext context) {
-    final Size size = MediaQuery
-        .of(context)
-        .size;
+    final Size size = MediaQuery.of(context).size;
     return BlocBuilder<QuizScreenBloc, QuizScreenState>(
       builder: (context, state) {
         return Stack(
@@ -57,7 +45,7 @@ class _QuestionCardState extends State<QuestionCard> {
                     ),
                     child: Padding(
                       padding:
-                      EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+                          EdgeInsets.symmetric(vertical: 30, horizontal: 20),
                       child: Text(
                         sample_data[state.progressQuestion]["question"],
                         style: TextStyle(

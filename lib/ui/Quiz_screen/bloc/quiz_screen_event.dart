@@ -48,3 +48,14 @@ class ResetChooseOption extends QuizScreenEvent {
   List<Object?> get props => [];
 }
 
+class CountScore extends QuizScreenEvent {
+  @override
+  List<Object?> get props => [];
+}
+class ResetScore extends QuizScreenEvent {
+  @override
+  List<Object?> get props => [];
+}
+
+
+
