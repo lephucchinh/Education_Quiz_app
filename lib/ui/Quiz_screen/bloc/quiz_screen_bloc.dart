@@ -9,7 +9,7 @@ part 'quiz_screen_event.dart';
 part 'quiz_screen_state.dart';
 
 class QuizScreenBloc extends Bloc<QuizScreenEvent, QuizScreenState> {
-  QuizScreenBloc() : super(QuizScreenState.initial()) {
+  QuizScreenBloc() : super(const QuizScreenState.initial()) {
     on<StartTimer>(_onStartTimer);
     on<StopTimer>(_onStopTimer);
     on<TimerLoader>(_onTimerLoader);
@@ -30,7 +30,7 @@ class QuizScreenBloc extends Bloc<QuizScreenEvent, QuizScreenState> {
   int millisecond = 0;
   int progressQuestion = 0;
   int numberChoose = 0;
-  int score = 0;
+  double score = 0;
 
   //////////////////////////////////////////////////
 
@@ -42,6 +42,10 @@ class QuizScreenBloc extends Bloc<QuizScreenEvent, QuizScreenState> {
           progressTime: progressTime,
         ));
         progressTime += 0.002;
+        if (progressTime > 1) {
+          progressTime = 1;
+        }
+
         millisecond += 100;
         if (millisecond >= 1000) {
           time += 1;
@@ -61,6 +65,10 @@ class QuizScreenBloc extends Bloc<QuizScreenEvent, QuizScreenState> {
     _timer.cancel();
     progressTime = 0;
     time = 0;
+    add(TimerLoader(
+      time: time,
+      progressTime: progressTime,
+    ));
   }
 
   _onProgressQuestionsIncrease(
@@ -102,14 +110,16 @@ class QuizScreenBloc extends Bloc<QuizScreenEvent, QuizScreenState> {
     emit(state.copyWith(numberChoose: numberChoose));
   }
 
-  _onChooseNext(ChooseNext event , Emitter<QuizScreenState> emit) {
+  _onChooseNext(ChooseNext event, Emitter<QuizScreenState> emit) {
     emit(state.copyWith(choose: false));
   }
 
   _onCountScore(CountScore event, Emitter<QuizScreenState> emit) {
-    score += 1;
-    emit(state.copyWith(score: score));
-    print('score: ${state.score}');
+    if (score < 4) {
+      score += 1;
+      emit(state.copyWith(score: score));
+      print('score: ${state.score}');
+    }
   }
 
   _onResetScore(ResetScore event, Emitter<QuizScreenState> emit) {

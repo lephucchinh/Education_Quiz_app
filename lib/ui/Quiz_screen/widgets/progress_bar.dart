@@ -15,15 +15,11 @@ class ProgressBar extends StatefulWidget {
 
 class _ProgressBarState extends State<ProgressBar> {
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
     context.read<QuizScreenBloc>().add(ProgressQuestionsReset());
+    super.didChangeDependencies();
   }
-
   @override
-  void dispose() {
-    super.dispose();
-  }
 
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;

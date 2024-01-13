@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quizgames/ui/Home_screen/Home_screen.dart';
+import 'package:quizgames/ui/Home_screen/bloc/home_screen_bloc.dart';
 import 'package:quizgames/ui/Quiz_screen/bloc/quiz_screen_bloc.dart';
 
 import 'bloc/app_bloc.dart';
@@ -15,6 +16,8 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => AppBloc()),
         BlocProvider(create: (context) => QuizScreenBloc()),
+        BlocProvider(create: (context) => HomeScreenBloc()),
+
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

@@ -7,10 +7,10 @@ class HomeScreenState extends Equatable {
     this.coinsAchieve = 0,
   });
 
-  final int coinsAchieve;
+  final double coinsAchieve;
 
   HomeScreenState copyWith({
-    int? coinsAchieve,
+    double? coinsAchieve,
   }) {
     return HomeScreenState._(coinsAchieve: coinsAchieve ?? this.coinsAchieve);
   }

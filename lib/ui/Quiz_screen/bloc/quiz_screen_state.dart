@@ -29,7 +29,7 @@ class QuizScreenState extends Equatable {
   final int idOptionChoose;
   final int idAnswer;
   final int numberChoose;
-  final int score;
+  final double score;
   final bool choose;
 
   QuizScreenState copyWith({
@@ -39,7 +39,7 @@ class QuizScreenState extends Equatable {
     int? idOptionChoose,
     int? idAnswer,
     int? numberChoose,
-    int? score,
+    double? score,
     bool? choose,
   }) {
     return QuizScreenState._(

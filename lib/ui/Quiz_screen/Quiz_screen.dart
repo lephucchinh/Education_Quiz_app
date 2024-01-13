@@ -16,19 +16,16 @@ class QuizScreen extends StatefulWidget {
 }
 
 class _QuizScreenState extends State<QuizScreen> {
+  @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return SafeArea(
       child: BlocListener<QuizScreenBloc, QuizScreenState>(
         listener: (context, state) {
           if (state.time == 50) {
-            context.read<QuizScreenBloc>().add(ResetChooseOption());
-            context.read<QuizScreenBloc>().add(ProgressQuestionsReset());
-            context.read<QuizScreenBloc>().add(StopTimer());
-            Navigator.pushAndRemoveUntil(
+            Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (_) => ResultScreen()),
-              (route) => false,
             );
           }
         },
@@ -79,18 +76,17 @@ class _QuizScreenState extends State<QuizScreen> {
                       visible: state.choose,
                       child: GestureDetector(
                         onTap: () {
-                          if (state.progressQuestion + 1 == sample_data.length) {
+                          if (state.progressQuestion + 1 ==
+                              sample_data.length) {
                             context
                                 .read<QuizScreenBloc>()
                                 .add(ResetChooseOption());
                             context
                                 .read<QuizScreenBloc>()
                                 .add(ProgressQuestionsReset());
-                            context.read<QuizScreenBloc>().add(StopTimer());
-                            Navigator.pushAndRemoveUntil(
+                            Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(builder: (_) => ResultScreen()),
-                              (route) => false,
                             );
                           }
                           setState(() {

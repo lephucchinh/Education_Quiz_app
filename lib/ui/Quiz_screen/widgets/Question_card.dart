@@ -13,16 +13,13 @@ class QuestionCard extends StatefulWidget {
 }
 
 class _QuestionCardState extends State<QuestionCard> {
-  void initState() {
+  @override
+  void didChangeDependencies() {
     context.read<QuizScreenBloc>().add(StartTimer());
-    super.initState();
+    super.didChangeDependencies();
   }
 
   @override
-  void dispose() {
-    context.read<QuizScreenBloc>().add(StopTimer());
-    super.dispose();
-  }
 
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quizgames/ui/Home_screen/Home_screen.dart';
+import 'package:quizgames/ui/Home_screen/bloc/home_screen_bloc.dart';
 import 'package:quizgames/ui/Quiz_screen/bloc/quiz_screen_bloc.dart';
 
 class ResultScreen extends StatefulWidget {
@@ -11,14 +12,36 @@ class ResultScreen extends StatefulWidget {
 }
 
 class _ResultScreenState extends State<ResultScreen> {
+  @override
+  void didChangeDependencies() {
+    context.read<QuizScreenBloc>().add(ResetChooseOption());
+    context.read<QuizScreenBloc>().add(ProgressQuestionsReset());
+    context.read<QuizScreenBloc>().add(StopTimer());
+    super.didChangeDependencies();
+  }
 
+  @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery
-        .of(context)
-        .size;
-    return BlocBuilder<QuizScreenBloc, QuizScreenState>(
-      builder: (context, state) {
-        return Scaffold(
+    final Size size = MediaQuery.of(context).size;
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<QuizScreenBloc, QuizScreenState>(
+            listener: (context, state) {
+          print('blocListener');
+            context
+                .read<HomeScreenBloc>()
+                .add(UpdateCoins(coins: state.score * 10));
+          context
+              .read<HomeScreenBloc>()
+              .add(UpdateCoins(coins: 0));
+            }),
+        BlocListener<HomeScreenBloc, HomeScreenState>(
+          listener: (context, state) {},
+        ),
+      ],
+      child: BlocBuilder<QuizScreenBloc, QuizScreenState>(
+        builder: (context, state) {
+          return Scaffold(
             appBar: AppBar(
               leading: IconButton(
                   onPressed: () {
@@ -27,9 +50,10 @@ class _ResultScreenState extends State<ResultScreen> {
                       MaterialPageRoute(
                         builder: (context) => HomeScreen(),
                       ),
-                          (route) => false,
+                      (route) => false,
                     );
                     context.read<QuizScreenBloc>().add(ResetScore());
+                    context.read<QuizScreenBloc>().add(StopTimer());
                   },
                   icon: Icon(Icons.arrow_back_ios_new)),
             ),
@@ -106,19 +130,19 @@ class _ResultScreenState extends State<ResultScreen> {
                   ),
                   RichText(
                       text: TextSpan(children: [
-                        TextSpan(
-                            text: '${state.score}',
-                            style: TextStyle(
-                                color: Colors.indigo,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 40)),
-                        TextSpan(
-                            text: ' / 4',
-                            style: TextStyle(
-                                color: Colors.black54,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 40)),
-                      ])),
+                    TextSpan(
+                        text: '${(state.score).toInt()}',
+                        style: TextStyle(
+                            color: Colors.indigo,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 40)),
+                    TextSpan(
+                        text: ' / 4',
+                        style: TextStyle(
+                            color: Colors.black54,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 40)),
+                  ])),
                   const SizedBox(
                     height: 30,
                   ),
@@ -137,7 +161,7 @@ class _ResultScreenState extends State<ResultScreen> {
                         'assets/icons/dollar.png',
                         width: 35,
                       ),
-                      Text('${state.score * 10}',
+                      Text('${(state.score * 10).toInt()}',
                           style: TextStyle(
                               color: Colors.black54,
                               fontWeight: FontWeight.bold,
@@ -159,9 +183,9 @@ class _ResultScreenState extends State<ResultScreen> {
                         ),
                         child: Center(
                             child: Text(
-                              'Share Result',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            )),
+                          'Share Result',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        )),
                       ),
                       const SizedBox(
                         width: 40,
@@ -175,9 +199,9 @@ class _ResultScreenState extends State<ResultScreen> {
                         ),
                         child: Center(
                             child: Text(
-                              'Take New Quiz',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            )),
+                          'Take New Quiz',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        )),
                       ),
                     ],
                   )
@@ -185,8 +209,8 @@ class _ResultScreenState extends State<ResultScreen> {
               ),
             ),
           );
-
-      },
+        },
+      ),
     );
   }
 }
