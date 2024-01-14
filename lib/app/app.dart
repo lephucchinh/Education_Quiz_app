@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quizgames/ui/Home_screen/Home_screen.dart';
 import 'package:quizgames/ui/Home_screen/bloc/home_screen_bloc.dart';
 import 'package:quizgames/ui/Quiz_screen/bloc/quiz_screen_bloc.dart';
+import 'package:quizgames/ui/login_screen/Login_screen.dart';
 
 import 'bloc/app_bloc.dart';
 
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: const HomeScreen(),
+        home: const LoginScreen(),
       ),
     );
   }
