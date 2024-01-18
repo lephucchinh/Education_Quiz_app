@@ -18,7 +18,7 @@ class CoinsAdapter extends TypeAdapter<Coins> {
     };
     return Coins(
       user: fields[0] as String,
-      coin: fields[1] as double,
+      coin: fields[1] as int,
     );
   }
 

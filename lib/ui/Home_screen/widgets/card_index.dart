@@ -24,7 +24,9 @@ class _CardIndexState extends State<CardIndex> {
               color: Colors.white,
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Row(
+
+            child:
+            Row(
               children: [
                 Expanded(
                   child: GestureDetector(
@@ -74,8 +76,8 @@ class _CardIndexState extends State<CardIndex> {
                               'Coins',
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
-                            Text(
-                              '${state.coinsAchieve.toInt()}',
+                            if(state is CoinsLoadedState)
+                            Text(state.coin.toString(),
                               style: TextStyle(
                                   color: Colors.pinkAccent,
                                   fontWeight: FontWeight.bold),
@@ -85,7 +87,9 @@ class _CardIndexState extends State<CardIndex> {
                       ],
                     )),
               ],
-            ));
+            )
+
+        );
       },
     );
   }

@@ -1,20 +1,19 @@
 part of 'home_screen_bloc.dart';
 
-class HomeScreenState extends Equatable {
-  const HomeScreenState._({required this.coinsAchieve});
+abstract class HomeScreenState extends Equatable {
+  const HomeScreenState();
+}
 
-  const HomeScreenState.initial({
-    this.coinsAchieve = 0,
-  });
-
-  final double coinsAchieve;
-
-  HomeScreenState copyWith({
-    double? coinsAchieve,
-  }) {
-    return HomeScreenState._(coinsAchieve: coinsAchieve ?? this.coinsAchieve);
-  }
-
+class HomeScreenInitial extends HomeScreenState {
   @override
-  List<Object?> get props => [coinsAchieve];
+  List<Object?> get props => [];
+}
+
+class CoinsLoadedState extends HomeScreenState {
+  final int coin;
+
+  const CoinsLoadedState({required this.coin});
+  @override
+  List<Object?> get props => [coin];
+
 }

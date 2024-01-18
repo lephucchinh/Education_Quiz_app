@@ -1,18 +1,16 @@
 part of 'app_bloc.dart';
 
 class AppState extends Equatable {
-  const AppState._({required this.success});
+  const AppState._();
 
-  const AppState.initial({
-    this.success = false,
-  });
+  const AppState.initial();
 
-  final bool success;
 
-  AppState copyWith({bool? success}) {
-    return AppState._(success: success ?? this.success);
+  AppState copyWith() {
+    return AppState._(
+        );
   }
 
   @override
-  List<Object?> get props => [success];
+  List<Object?> get props => [];
 }

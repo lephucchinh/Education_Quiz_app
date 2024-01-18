@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:quizgames/models/Questions.dart';
+import 'package:quizgames/ui/Quiz_screen/Quiz_screen.dart';
 import 'package:quizgames/ui/Quiz_screen/bloc/quiz_screen_bloc.dart';
 import 'package:quizgames/ui/Result_creen/Result_Screen.dart';
 
@@ -20,7 +21,6 @@ class _QuestionCardState extends State<QuestionCard> {
   }
 
   @override
-
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return BlocBuilder<QuizScreenBloc, QuizScreenState>(

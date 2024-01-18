@@ -4,11 +4,14 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 
+import '../../../services/total_coins.dart';
+
 part 'quiz_screen_event.dart';
 
 part 'quiz_screen_state.dart';
 
 class QuizScreenBloc extends Bloc<QuizScreenEvent, QuizScreenState> {
+
   QuizScreenBloc() : super(const QuizScreenState.initial()) {
     on<StartTimer>(_onStartTimer);
     on<StopTimer>(_onStopTimer);

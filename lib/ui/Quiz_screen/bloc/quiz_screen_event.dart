@@ -60,9 +60,8 @@ class ResetScore extends QuizScreenEvent {
 class ChooseNext extends QuizScreenEvent {
   @override
   List<Object?> get props =>[];
-
-
 }
+
 
 
 

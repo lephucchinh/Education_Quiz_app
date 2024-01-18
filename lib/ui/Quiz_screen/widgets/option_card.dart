@@ -24,7 +24,7 @@ class _OptionCardState extends State<OptionCard> {
             setState(() {
               context.read<QuizScreenBloc>().add(ChooseOption(
                   indexAnswer: sample_data[state.progressQuestion]
-                      ['answer_index'],
+                  ['answer_index'],
                   indexChoose: widget.index));
             });
           },
@@ -36,21 +36,21 @@ class _OptionCardState extends State<OptionCard> {
               border: Border.all(
                 width: 2,
                 color: (state.numberChoose > state.progressQuestion &&
-                        widget.index != state.idAnswer &&
-                        widget.index == state.idAnswer)
+                    widget.index != state.idAnswer &&
+                    widget.index == state.idAnswer)
                     ? Colors.grey
                     : (state.numberChoose > state.progressQuestion &&
-                            widget.index == state.idAnswer)
-                        ? Colors.blueAccent
-                        : (state.numberChoose > state.progressQuestion &&
-                                widget.index != state.idAnswer &&
-                                widget.index == state.idOptionChoose)
-                            ? Colors.red
-                            : (state.numberChoose > state.progressQuestion &&
-                                    widget.index == state.idAnswer &&
-                                    state.idAnswer == state.idOptionChoose)
-                                ? Colors.red
-                                : Colors.grey,
+                    widget.index == state.idAnswer)
+                    ? Colors.blueAccent
+                    : (state.numberChoose > state.progressQuestion &&
+                    widget.index != state.idAnswer &&
+                    widget.index == state.idOptionChoose)
+                    ? Colors.red
+                    : (state.numberChoose > state.progressQuestion &&
+                    widget.index == state.idAnswer &&
+                    state.idAnswer == state.idOptionChoose)
+                    ? Colors.red
+                    : Colors.grey,
               ),
               borderRadius: BorderRadius.circular(15),
             ),
@@ -61,114 +61,114 @@ class _OptionCardState extends State<OptionCard> {
                   padding: EdgeInsets.only(left: 25),
                   child: Text(
                     sample_data[state.progressQuestion]['options']
-                        [widget.index],
+                    [widget.index],
                     style: TextStyle(
                         color: (state.numberChoose > state.progressQuestion &&
-                                widget.index != state.idAnswer &&
-                                widget.index == state.idAnswer)
+                            widget.index != state.idAnswer &&
+                            widget.index == state.idAnswer)
                             ? Colors.grey
                             : (state.numberChoose > state.progressQuestion &&
-                                    widget.index == state.idAnswer)
-                                ? Colors.blueAccent
-                                : (state.numberChoose >
-                                            state.progressQuestion &&
-                                        widget.index != state.idAnswer &&
-                                        widget.index == state.idOptionChoose)
-                                    ? Colors.red
-                                    : (state.numberChoose >
-                                                state.progressQuestion &&
-                                            widget.index == state.idAnswer &&
-                                            state.idAnswer ==
-                                                state.idOptionChoose)
-                                        ? Colors.red
-                                        : Colors.grey,
+                            widget.index == state.idAnswer)
+                            ? Colors.blueAccent
+                            : (state.numberChoose >
+                            state.progressQuestion &&
+                            widget.index != state.idAnswer &&
+                            widget.index == state.idOptionChoose)
+                            ? Colors.red
+                            : (state.numberChoose >
+                            state.progressQuestion &&
+                            widget.index == state.idAnswer &&
+                            state.idAnswer ==
+                                state.idOptionChoose)
+                            ? Colors.red
+                            : Colors.grey,
                         fontSize: 18,
                         fontWeight: FontWeight.bold),
                   ),
                 ),
                 (state.numberChoose > state.progressQuestion &&
-                        widget.index != state.idAnswer &&
-                        widget.index == state.idAnswer)
+                    widget.index != state.idAnswer &&
+                    widget.index == state.idAnswer)
                     ? Padding(
-                        padding: EdgeInsets.only(right: 25),
-                        child: Container(
-                          width: 30,
-                          height: 30,
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.grey,
-                              width: 2,
-                            ),
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                        ),
-                      )
+                  padding: EdgeInsets.only(right: 25),
+                  child: Container(
+                    width: 30,
+                    height: 30,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.grey,
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                  ),
+                )
                     : (state.numberChoose > state.progressQuestion &&
-                            widget.index == state.idAnswer)
-                        ? Padding(
-                            padding: EdgeInsets.only(right: 25),
-                            child: Container(
-                              width: 30,
-                              height: 30,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              child: Image.asset(
-                                'assets/icons/icons8-correct-40.png',
-                                width: 35,
-                              ),
-                            ),
-                          )
-                        : (state.numberChoose > state.progressQuestion &&
-                                widget.index != state.idAnswer &&
-                                widget.index == state.idOptionChoose)
-                            ? Padding(
-                                padding: EdgeInsets.only(right: 25),
-                                child: Container(
-                                  width: 30,
-                                  height: 30,
-                                  decoration: BoxDecoration(
-                                    color: Colors.red,
-                                    border: Border.all(color: Colors.red),
-                                    borderRadius: BorderRadius.circular(30),
-                                  ),
-                                  child: Image.asset(
-                                    'assets/icons/icons8-wrong-96.png',
-                                    width: 35,
-                                  ),
-                                ),
-                              )
-                            : (state.numberChoose > state.progressQuestion &&
-                                    widget.index == state.idAnswer &&
-                                    state.idAnswer == state.idOptionChoose)
-                                ? Padding(
-                                    padding: EdgeInsets.only(right: 25),
-                                    child: Container(
-                                      width: 30,
-                                      height: 30,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(30),
-                                      ),
-                                      child: Image.asset(
-                                        'assets/icons/icons8-correct-40.png',
-                                        width: 35,
-                                      ),
-                                    ),
-                                  )
-                                : Padding(
-                                    padding: EdgeInsets.only(right: 25),
-                                    child: Container(
-                                      width: 30,
-                                      height: 30,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                          width: 2,
-                                          color: Colors.grey,
-                                        ),
-                                        borderRadius: BorderRadius.circular(30),
-                                      ),
-                                    ),
-                                  ),
+                    widget.index == state.idAnswer)
+                    ? Padding(
+                  padding: EdgeInsets.only(right: 25),
+                  child: Container(
+                    width: 30,
+                    height: 30,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: Image.asset(
+                      'assets/icons/icons8-correct-40.png',
+                      width: 35,
+                    ),
+                  ),
+                )
+                    : (state.numberChoose > state.progressQuestion &&
+                    widget.index != state.idAnswer &&
+                    widget.index == state.idOptionChoose)
+                    ? Padding(
+                  padding: EdgeInsets.only(right: 25),
+                  child: Container(
+                    width: 30,
+                    height: 30,
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      border: Border.all(color: Colors.red),
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: Image.asset(
+                      'assets/icons/icons8-wrong-96.png',
+                      width: 35,
+                    ),
+                  ),
+                )
+                    : (state.numberChoose > state.progressQuestion &&
+                    widget.index == state.idAnswer &&
+                    state.idAnswer == state.idOptionChoose)
+                    ? Padding(
+                  padding: EdgeInsets.only(right: 25),
+                  child: Container(
+                    width: 30,
+                    height: 30,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: Image.asset(
+                      'assets/icons/icons8-correct-40.png',
+                      width: 35,
+                    ),
+                  ),
+                )
+                    : Padding(
+                  padding: EdgeInsets.only(right: 25),
+                  child: Container(
+                    width: 30,
+                    height: 30,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        width: 2,
+                        color: Colors.grey,
+                      ),
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                  ),
+                ),
 
                 // Image.asset('assets/icons/icons8-wrong-96.png',width: 35,),
               ],

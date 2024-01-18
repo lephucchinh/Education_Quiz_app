@@ -4,10 +4,12 @@ abstract class HomeScreenEvent extends Equatable {
   const HomeScreenEvent();
 }
 
-class UpdateCoins extends HomeScreenEvent {
-  const UpdateCoins({required this.coins});
-  final double coins;
-  @override
-  List<Object?> get props => [coins];
-}
+class LoadCoinsEvent extends HomeScreenEvent {
 
+  final String username;
+
+  const LoadCoinsEvent( {required this.username,});
+  @override
+  List<Object?> get props => [username];
+
+}

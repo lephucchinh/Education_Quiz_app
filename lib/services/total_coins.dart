@@ -1,27 +1,34 @@
 import 'package:hive/hive.dart';
 import 'package:quizgames/domain/coins.dart';
 
-class TotalCoins {
+class TotalCoinsServices {
   late Box<Coins> _coins;
 
   Future<void> init() async {
     Hive.registerAdapter(CoinsAdapter());
     _coins = await Hive.openBox<Coins>('coin');
+
+    await _coins.clear();
+
+    await _coins.add(Coins(user: 'testuser1', coin: 20.toInt()));
+    await _coins.add(Coins(user: 'flutterfromscratch', coin: 10.toInt()));
   }
 
   getCoins(final String username) {
-    final coin = _coins.values.where((element) => element.user == username);
-    return coin;
+    // nếu trả về 1 giá trị duy nhất nên dùng firstWhere -- kinh nghiệm sau khi fix bug
+    final coins = _coins.values.firstWhere((element) => element.user == username);
+    return coins.coin;
   }
 
-  void addCoins(final double coin, final String username) {
+  void addCoins(final int coin, final String username) {
     _coins.add(Coins(user: username, coin: coin));
   }
 
-  Future<void> updateCoins(final double coin, final String username) async {
+  Future<void> updateCoins(
+      final int coin, final String username, final int score) async {
     final coinsToEdit = _coins.values.firstWhere(
         (element) => element.coin == coin && element.user == username);
-    final index = coinsToEdit.key as double;
-    await _coins.put(index, Coins(user: username, coin: coin));
+    final index = coinsToEdit.key as int;
+    await _coins.put(index, Coins(user: username, coin: coin + score * 10));
   }
 }

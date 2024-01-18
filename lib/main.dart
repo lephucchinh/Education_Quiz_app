@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:quizgames/app/app.dart';
-void main() {
+import 'package:hive_flutter/adapters.dart';
+import 'app/app.dart';
+void main() async {
+  await Hive.initFlutter();
   runApp(const MyApp());
 }
 

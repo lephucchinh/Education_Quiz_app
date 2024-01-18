@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quizgames/models/Questions.dart';
+import 'package:quizgames/ui/Quiz_screen/Quiz_screen.dart';
 import 'package:quizgames/ui/Quiz_screen/bloc/quiz_screen_bloc.dart';
-import 'package:quizgames/ui/Result_creen/Result_Screen.dart';
 
 class ProgressBar extends StatefulWidget {
   const ProgressBar({
@@ -15,14 +15,10 @@ class ProgressBar extends StatefulWidget {
 
 class _ProgressBarState extends State<ProgressBar> {
   @override
-  void didChangeDependencies() {
-    context.read<QuizScreenBloc>().add(ProgressQuestionsReset());
-    super.didChangeDependencies();
-  }
-  @override
-
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
+    final Size size = MediaQuery
+        .of(context)
+        .size;
     return BlocBuilder<QuizScreenBloc, QuizScreenState>(
       builder: (context, state) {
         return Container(

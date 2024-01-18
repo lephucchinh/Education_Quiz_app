@@ -19,108 +19,124 @@ class _QuizScreenState extends State<QuizScreen> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    return SafeArea(
-      child: BlocListener<QuizScreenBloc, QuizScreenState>(
-        listener: (context, state) {
-          if (state.time == 50) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (_) => ResultScreen()),
-            );
-          }
-        },
-        child: Scaffold(
-          body: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 17),
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 50,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return BlocProvider(
+      create: (context) => QuizScreenBloc(),
+      child: SafeArea(
+        child: BlocConsumer<QuizScreenBloc, QuizScreenState>(
+          listener: (context, state) async {
+            if (state.time == 50) {
+              await Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (_) => ResultScreen()),
+              );
+              context.read<QuizScreenBloc>().add(ResetChooseOption());
+              context.read<QuizScreenBloc>().add(ProgressQuestionsReset());
+              context.read<QuizScreenBloc>().add(StopTimer());
+
+            }
+          },
+          builder: (context, state) {
+            return Scaffold(
+              body: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 17),
+                child: Column(
                   children: [
-                    GestureDetector(
-                      onTap: () {
-                        context.read<QuizScreenBloc>().add(ResetChooseOption());
-                        context
-                            .read<QuizScreenBloc>()
-                            .add(ProgressQuestionsReset());
-                        context.read<QuizScreenBloc>().add(StopTimer());
-                        Navigator.pop(context);
-                        print('pop');
-                      },
-                      child: Container(
-                        width: 30,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(30),
-                            border: Border.all(
-                              width: 2,
-                              color: Colors.black,
-                            )),
-                        child:
-                            Image.asset('assets/icons/icons8-multiply-50.png'),
-                      ),
+                    const SizedBox(
+                      height: 50,
                     ),
-                    ProgressBar(),
-                  ],
-                ),
-                const SizedBox(
-                  height: 45,
-                ),
-                QuestionCard(),
-                OptionsList(),
-                BlocBuilder<QuizScreenBloc, QuizScreenState>(
-                  builder: (context, state) {
-                    return Visibility(
-                      visible: state.choose,
-                      child: GestureDetector(
-                        onTap: () {
-                          if (state.progressQuestion + 1 ==
-                              sample_data.length) {
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
                             context
                                 .read<QuizScreenBloc>()
                                 .add(ResetChooseOption());
                             context
                                 .read<QuizScreenBloc>()
                                 .add(ProgressQuestionsReset());
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(builder: (_) => ResultScreen()),
-                            );
-                          }
-                          setState(() {
-                            context.read<QuizScreenBloc>().add(ChooseNext());
-                            context
-                                .read<QuizScreenBloc>()
-                                .add(ProgressQuestionsIncrease());
-                          });
-                        },
-                        child: Container(
-                          width: size.width * 0.85,
-                          height: 55,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: Colors.cyan,
+                            context.read<QuizScreenBloc>().add(StopTimer());
+                            Navigator.pop(context);
+                            print('pop');
+                          },
+                          child: Container(
+                            width: 30,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(30),
+                                border: Border.all(
+                                  width: 2,
+                                  color: Colors.black,
+                                )),
+                            child: Image.asset(
+                                'assets/icons/icons8-multiply-50.png'),
                           ),
-                          child: Center(
-                              child: Text(
-                            (state.progressQuestion + 1 == sample_data.length)
-                                ? 'End'
-                                : 'Next',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 19),
-                          )),
                         ),
-                      ),
-                    );
-                  },
-                )
-              ],
-            ),
-          ),
+                        ProgressBar(),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 45,
+                    ),
+                    QuestionCard(),
+                    OptionsList(),
+                    BlocBuilder<QuizScreenBloc, QuizScreenState>(
+                      builder: (context, state) {
+                        return Visibility(
+                          visible: state.choose,
+                          child: InkWell(
+                            onTap: () async {
+                              if (state.progressQuestion + 1 ==
+                                  sample_data.length) {
+                                await Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => ResultScreen()),
+                                );
+                                context
+                                    .read<QuizScreenBloc>()
+                                    .add(ResetChooseOption());
+                                context
+                                    .read<QuizScreenBloc>()
+                                    .add(ProgressQuestionsReset());
+                                context.read<QuizScreenBloc>().add(StopTimer());
+                              }
+                              setState(() {
+                                context
+                                    .read<QuizScreenBloc>()
+                                    .add(ChooseNext());
+                                context
+                                    .read<QuizScreenBloc>()
+                                    .add(ProgressQuestionsIncrease());
+                              });
+                            },
+                            child: Container(
+                              width: size.width * 0.85,
+                              height: 55,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: Colors.cyan,
+                              ),
+                              child: Center(
+                                  child: Text(
+                                (state.progressQuestion + 1 ==
+                                        sample_data.length)
+                                    ? 'End'
+                                    : 'Next',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 19),
+                              )),
+                            ),
+                          ),
+                        );
+                      },
+                    )
+                  ],
+                ),
+              ),
+            );
+          },
         ),
       ),
     );

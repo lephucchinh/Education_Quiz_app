@@ -7,7 +7,7 @@ class Coins extends HiveObject {
   @HiveField(0)
   final String user;
   @HiveField(1)
-  final double coin;
+  final int coin;
 
   Coins({required this.user, required this.coin});
   
