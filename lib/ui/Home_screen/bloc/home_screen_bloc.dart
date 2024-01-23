@@ -13,8 +13,6 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
     on<LoadCoinsEvent>(_onLoadCoinsEvent);
   }
 
-  int coins = 0;
-  int coinsAchieve = 0;
 
   _onLoadCoinsEvent(LoadCoinsEvent event, Emitter<HomeScreenState> emit) {
     final coin = _totalCoinsServices.getCoins(event.username);

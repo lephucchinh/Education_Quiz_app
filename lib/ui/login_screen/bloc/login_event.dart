@@ -14,8 +14,6 @@ class LoginPressEvent extends LoginEvent {
 }
 
 class RegisterServicesEvent extends LoginEvent {
-
   @override
   List<Object?> get props => [];
-
 }

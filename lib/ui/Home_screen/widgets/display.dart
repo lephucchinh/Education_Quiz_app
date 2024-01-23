@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quizgames/ui/Rank_screen/Rank_Screen.dart';
 
 class Display extends StatelessWidget {
   const Display({super.key});
@@ -17,7 +18,7 @@ class Display extends StatelessWidget {
         ),
         GestureDetector(
           onTap: () {
-            print('profile');
+            Navigator.push(context, MaterialPageRoute(builder: (_) => RankScreen()));
           },
           child: CircleAvatar(
             maxRadius: 35,

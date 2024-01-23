@@ -20,8 +20,8 @@ class TotalCoinsServices {
     return coins.coin;
   }
 
-  void addCoins(final int coin, final String username) {
-    _coins.add(Coins(user: username, coin: coin));
+  void addCoins( final String username) {
+    _coins.add(Coins(user: username, coin: 0.toInt()));
   }
 
   Future<void> updateCoins(
@@ -31,4 +31,5 @@ class TotalCoinsServices {
     final index = coinsToEdit.key as int;
     await _coins.put(index, Coins(user: username, coin: coin + score * 10));
   }
+
 }

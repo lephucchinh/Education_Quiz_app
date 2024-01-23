@@ -31,7 +31,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ..add(LoadCoinsEvent(username: widget.username)),
       child: Scaffold(
         backgroundColor: Colors.white.withOpacity(0.90),
-
         body: BlocBuilder<HomeScreenBloc, HomeScreenState>(
           builder: (context, state) {
             if(state is CoinsLoadedState){
@@ -62,7 +61,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               );
             }
-            else return Container();
+            else return Container(
+              color: Colors.pinkAccent,
+            );
 
           },
         ),
