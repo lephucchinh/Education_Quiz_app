@@ -17,33 +17,29 @@ class CardRank extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.symmetric(vertical: 7, horizontal: 30),
-      color: Colors.amber,
-      child: ListTile(
-        onTap: press,
-        leading: Text('${index}'),
-        title: Row(
-          children: [
-            CircleAvatar(
-              child: Image.asset(
-                'assets/icons/icons8-avatar-96.png',
-              ),
+    return ListTile(
+      onTap: press,
+      leading: Text('${index}'),
+      title: Row(
+        children: [
+          CircleAvatar(
+            child: Image.asset(
+              'assets/icons/icons8-avatar-96.png',
             ),
-            SizedBox(width: 20,),
-            Text(
-              text,
-              style:
-                  TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
-            ),
-          ],
-        ),
-        trailing: Text(
-          '${coin}',
-          style: TextStyle(
-            fontSize: 20,
-              fontWeight: FontWeight.bold, color: Colors.blueAccent),
-        ),
+          ),
+          SizedBox(width: 20,),
+          Text(
+            text,
+            style:
+                TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+          ),
+        ],
+      ),
+      trailing: Text(
+        '${coin}',
+        style: TextStyle(
+          fontSize: 20,
+            fontWeight: FontWeight.bold, color: Colors.blueAccent),
       ),
     );
   }

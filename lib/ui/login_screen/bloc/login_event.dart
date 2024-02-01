@@ -9,6 +9,7 @@ class LoginPressEvent extends LoginEvent {
   final String password;
 
   const LoginPressEvent({required this.username, required this.password});
+  @override
   List<Object?> get props => [username, password];
 
 }

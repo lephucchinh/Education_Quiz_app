@@ -11,9 +11,10 @@ class HomeScreenInitial extends HomeScreenState {
 
 class CoinsLoadedState extends HomeScreenState {
   final int coin;
+  final String name;
 
-  const CoinsLoadedState({required this.coin});
+  const CoinsLoadedState({required this.name, required this.coin});
   @override
-  List<Object?> get props => [coin];
+  List<Object?> get props => [coin,name];
 
 }

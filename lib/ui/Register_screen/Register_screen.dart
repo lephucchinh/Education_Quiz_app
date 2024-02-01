@@ -17,6 +17,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final usernameField = TextEditingController();
   final passwordField = TextEditingController();
   final confirmPasswordField = TextEditingController();
+  final nameField = TextEditingController();
   bool checkConfirmPassword = true;
 
   @override
@@ -73,6 +74,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             height: 50,
                           ),
                           TextFormField(
+                            controller: nameField,
+                            maxLength: 40,
+                            maxLines: 1,
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.pinkAccent
+                                            .withOpacity(0.3))),
+                                labelText: "Your name",
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: 15, horizontal: 10)),
+                          ),
+                          TextFormField(
                             controller: usernameField,
                             maxLength: 40,
                             maxLines: 1,
@@ -121,17 +135,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           InkWell(
                             onTap: () {
                               setState(() {
-                                if(passwordField.text != confirmPasswordField.text){
+                                if (passwordField.text !=
+                                    confirmPasswordField.text) {
                                   checkConfirmPassword = !checkConfirmPassword;
-                                }
-                                else{
-                                  BlocProvider.of<RegisterScreenBloc>(context).add(
-                                      RegisterAccountEvent(
+                                } else {
+                                  BlocProvider.of<RegisterScreenBloc>(context)
+                                      .add(RegisterAccountEvent(
                                           username: usernameField.text,
-                                          password: passwordField.text));
+                                          password: passwordField.text,
+                                          name: nameField.text));
                                 }
                               });
-
                             },
                             child: Container(
                               margin: EdgeInsets.symmetric(vertical: 10),

@@ -7,7 +7,9 @@ class User extends HiveObject {
   @HiveField(0)
   final String username;
   @HiveField(1)
-  final String password;
+  final String? password;
+  @HiveField(2)
+  final String? name;
 
-  User({required this.username, required this.password});
+  User({required this.name ,required this.username, required this.password});
 }

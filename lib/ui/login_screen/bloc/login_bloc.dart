@@ -27,8 +27,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     }
   }
   _onRegisterServicesEvent (RegisterServicesEvent event ,  Emitter<LoginState> emit ) async {
+    print('LOginInitial');
     await _auth.init();
     await _coin.init();
-    emit(LoginInitial());
+     emit(LoginInitial());
   }
 }

@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quizgames/models/Questions.dart';
+import 'package:quizgames/services/total_coins.dart';
 import 'package:quizgames/ui/Quiz_screen/bloc/quiz_screen_bloc.dart';
 import 'package:quizgames/ui/Quiz_screen/widgets/Question_card.dart';
 import 'package:quizgames/ui/Quiz_screen/widgets/options_list.dart';
-import 'package:quizgames/ui/Result_creen/Result_Screen.dart';
+import 'package:quizgames/ui/Quiz_screen/Result_Screen.dart';
 
 import 'widgets/progress_bar.dart';
 
 class QuizScreen extends StatefulWidget {
-  const QuizScreen({super.key});
+  final String username;
+
+  const QuizScreen({super.key, required this.username});
 
   @override
   State<QuizScreen> createState() => _QuizScreenState();
@@ -20,19 +23,26 @@ class _QuizScreenState extends State<QuizScreen> {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return BlocProvider(
-      create: (context) => QuizScreenBloc(),
+      create: (context) =>
+          QuizScreenBloc(RepositoryProvider.of<TotalCoinsServices>(context)),
       child: SafeArea(
         child: BlocConsumer<QuizScreenBloc, QuizScreenState>(
           listener: (context, state) async {
             if (state.time == 50) {
+              context.read<QuizScreenBloc>().add(
+                  UpdateCoin(score: state.score, username: widget.username));
               await Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (_) => ResultScreen()),
+                MaterialPageRoute(
+                    builder: (_) => ResultScreen(
+                          score: state.score,
+                          coin: state.score * 10,
+                        )),
               );
+
               context.read<QuizScreenBloc>().add(ResetChooseOption());
               context.read<QuizScreenBloc>().add(ProgressQuestionsReset());
               context.read<QuizScreenBloc>().add(StopTimer());
-
             }
           },
           builder: (context, state) {
@@ -87,10 +97,16 @@ class _QuizScreenState extends State<QuizScreen> {
                             onTap: () async {
                               if (state.progressQuestion + 1 ==
                                   sample_data.length) {
+                                context.read<QuizScreenBloc>().add(UpdateCoin(
+                                    score: state.score,
+                                    username: widget.username));
                                 await Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (_) => ResultScreen()),
+                                      builder: (_) => ResultScreen(
+                                            score: state.score,
+                                            coin: state.score * 10,
+                                          )),
                                 );
                                 context
                                     .read<QuizScreenBloc>()

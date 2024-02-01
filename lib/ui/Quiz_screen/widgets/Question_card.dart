@@ -4,7 +4,7 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:quizgames/models/Questions.dart';
 import 'package:quizgames/ui/Quiz_screen/Quiz_screen.dart';
 import 'package:quizgames/ui/Quiz_screen/bloc/quiz_screen_bloc.dart';
-import 'package:quizgames/ui/Result_creen/Result_Screen.dart';
+import 'package:quizgames/ui/Quiz_screen/Result_Screen.dart';
 
 class QuestionCard extends StatefulWidget {
   const QuestionCard({super.key});

@@ -35,7 +35,12 @@ dependencies:
   percent_indicator: ^4.2.3
   equatable: ^2.0.0
   hive: ^2.2.3
+  firebase_core: ^2.24.2
   hive_flutter: ^1.1.0
+  firebase_auth: ^4.16.0
+  cloud_firestore: ^4.14.0
+  firebase_storage: ^11.6.0
+  firebase_messaging: ^14.7.10
 
 
   # The following adds the Cupertino Icons font to your application.

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quizgames/ui/Rank_screen/widgets/card_rank.dart';
+import 'package:quizgames/ui/login_screen/Login_screen.dart';
 
 class RankScreen extends StatefulWidget {
   const RankScreen({super.key});
@@ -13,124 +14,105 @@ class _RankScreenState extends State<RankScreen> {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Colors.white.withOpacity(0.90),
-      appBar: AppBar(
-        title: Center(child: Text('Coins Rankings')),
-        leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(Icons.arrow_back_ios_new)),
-        actions: [
-          InkWell(
-            onTap: () {},
-            child: Ink(
-              decoration: BoxDecoration(
-                color: Colors.limeAccent,
-                borderRadius: BorderRadius.circular(30),
-              ),
-              width: 40,
-              height: 40,
-              child: Icon(Icons.output),
-            ),
-          )
-        ],
-      ),
-      body: Center(
-        child: Column(
-          children: [
-            Expanded(
-              flex: 2,
-              child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 10),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                height: size.height * 0.25,
+                width: size.width,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Colors.pink.withOpacity(0.5),
-
+                  color: Color(0xFFABEBC6),
                 ),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ListTile(
-                      leading: CircleAvatar(
-                        maxRadius: 30,
-                        child: Image.asset(
-                          'assets/icons/icons8-avatar-96.png',
-                          width: 80,
-                        ),
-                      ),
-                      title: Text(
-                        'john',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18),
-                      ),
-                      trailing: Text(
-                        'No.6',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      subtitle: Text(
-                        '0',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(Icons.arrow_back_ios_new)),
+                        const Text('Coins Rankings'),
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => LoginScreen()));
+                          },
+                          child: Ink(
+                            decoration: BoxDecoration(
+                              color: Colors.limeAccent,
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            width: 40,
+                            height: 40,
+                            child: Icon(Icons.output),
+                          ),
+                        )
+                      ],
                     ),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      width: 100,
+                      height: 140,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          CircleAvatar(
+                            child: Image.asset('assets/icons/icons8-avatar-96.png'),
+                            maxRadius: 40,
+                          ),
+                          Text('1')
+                        ],
+                      ),
+                    )
                   ],
                 ),
               ),
-            ),
-            Expanded(
-                flex: 1,
-                child: Container(
-                  child: Center(
-                    child: Text('Top Player'),
-                  ),
-                )),
-            Expanded(
-              flex: 8,
-              child: ListView(
+              ListView(
+                shrinkWrap: true,
                 children: [
                   CardRank(
-                      image: 'assets/icons/icons8-avatar-96.png',
-                      text: 'john',
-                      press: () {},
-                      index: 1,
-                      coin: 0),
+                    image: 'assets/icons/icons8-avatar-96.png',
+                    text: 'john',
+                    press: () {},
+                    index: 1,
+                    coin: 10,
+                  ),
+                  Divider(),
                   CardRank(
-                      image: 'assets/icons/icons8-avatar-96.png',
-                      text: 'john',
-                      press: () {},
-                      index: 1,
-                      coin: 0),
+                    image: 'assets/icons/icons8-avatar-96.png',
+                    text: 'john',
+                    press: () {},
+                    index: 1,
+                    coin: 10,
+                  ),
+                  Divider(),
                   CardRank(
-                      image: 'assets/icons/icons8-avatar-96.png',
-                      text: 'john',
-                      press: () {},
-                      index: 1,
-                      coin: 0),
+                    image: 'assets/icons/icons8-avatar-96.png',
+                    text: 'john',
+                    press: () {},
+                    index: 1,
+                    coin: 10,
+                  ),
+                  Divider(),
                   CardRank(
-                      image: 'assets/icons/icons8-avatar-96.png',
-                      text: 'john',
-                      press: () {},
-                      index: 1,
-                      coin: 0),
-                  CardRank(
-                      image: 'assets/icons/icons8-avatar-96.png',
-                      text: 'john',
-                      press: () {},
-                      index: 1,
-                      coin: 0),
+                    image: 'assets/icons/icons8-avatar-96.png',
+                    text: 'john',
+                    press: () {},
+                    index: 1,
+                    coin: 10,
+                  ),
                 ],
-              ),
-            ),
-            Expanded(flex: 2, child: Container()),
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );

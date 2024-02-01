@@ -1,3 +1,5 @@
+import 'dart:math';
+
 const List sample_data = [
   {
     "id": 1,
@@ -25,3 +27,16 @@ const List sample_data = [
     "answer_index": 2,
   },
 ];
+List<Map<String, dynamic>> shuffleQuestionsAndOptions(List<Map<String, dynamic>> questions) {
+  Random random = Random();
+
+  // Trộn ngẫu nhiên danh sách câu hỏi
+  List<Map<String, dynamic>> shuffledQuestions = List.from(questions)..shuffle(random);
+
+  // Trộn ngẫu nhiên danh sách đáp án cho mỗi câu hỏi
+  for (var question in shuffledQuestions) {
+    question['options'].shuffle(random);
+  }
+
+  return shuffledQuestions;
+}

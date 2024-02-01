@@ -7,7 +7,9 @@ import 'package:quizgames/ui/Quiz_screen/bloc/quiz_screen_bloc.dart';
 import 'widgets/subjects.dart';
 
 class ListCardSubjects extends StatelessWidget {
-  const ListCardSubjects({super.key});
+  final String username;
+
+  const ListCardSubjects({super.key, required this.username});
 
   @override
   Widget build(BuildContext context) {
@@ -19,31 +21,34 @@ class ListCardSubjects extends StatelessWidget {
             Subjects(
               text: 'Maths',
               image: 'assets/icons/icons8-math-100.png',
-              press: () {
+              press: () async {
                 print('navigation');
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (_) => QuizScreen()));
+                await Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => QuizScreen(
+                      username: username,
+                    ),
+                  ),
+                );
+                context
+                    .read<HomeScreenBloc>()
+                    .add(LoadCoinsEvent(username: username));
               },
             ),
             Subjects(
               text: 'Chemistry',
               image: 'assets/icons/icons8-chemistry-50.png',
-              press: () {
-              },
+              press: () {},
             ),
             Subjects(
               text: 'English',
               image: 'assets/icons/icons8-english-100.png',
-              press: () {
-
-              },
+              press: () {},
             ),
             Subjects(
               text: 'Physics',
               image: 'assets/icons/icons8-physics-100.png',
-              press: () {
-
-              },
+              press: () {},
             ),
           ],
         );

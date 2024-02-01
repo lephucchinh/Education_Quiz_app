@@ -7,10 +7,10 @@ abstract class RegisterScreenEvent extends Equatable {
 class RegisterAccountEvent extends RegisterScreenEvent {
   final String username;
   final String password;
-
-  const RegisterAccountEvent({required this.username, required this.password});
+  final String name;
+  const RegisterAccountEvent( {required this.name,required this.username, required this.password});
   @override
-  List<Object?> get props => [username,password];
+  List<Object?> get props => [username,password,name];
 }
 
 class RegisterServicesEvent extends RegisterScreenEvent {

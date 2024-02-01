@@ -2,6 +2,7 @@ import 'package:hive/hive.dart';
 import 'package:quizgames/domain/user.dart';
 
 class AuthenticationService {
+
   late Box<User> _users;
 
   Future<void> init() async {
@@ -10,10 +11,9 @@ class AuthenticationService {
 
     await _users.clear();
 
-    await _users.add(User(username: 'testuser1', password: "password"));
-    await _users.add(
-        User(username: 'flutterfromscratch', password: 'password'));
+    await _users.add(User(username: 'lpchinh25@gmail.com', password: "210369", name: 'Admin'));
   }
+
 
   Future<String?> authenticateUser(final String username,
       final String password) async {
@@ -27,7 +27,14 @@ class AuthenticationService {
     }
   }
 
-  Future CreateUser(final String username, final String password) async {
+  getName(final String username) {
+    final name = _users.values.firstWhere((element) => element.username  == username);
+
+      return name.name;
+
+  }
+
+  Future createUser(final String username, final String password,final String name) async {
     final alreadyExists = _users.values.any((element) =>
     element.username.toLowerCase() == username.toLowerCase());
 
@@ -36,7 +43,7 @@ class AuthenticationService {
     }
 
     try{
-      _users.add(User(username: username, password: password));
+      _users.add(User(username: username, password: password, name: name));
       return UserCreationResult.success;
     }
     on Exception catch (ex) {

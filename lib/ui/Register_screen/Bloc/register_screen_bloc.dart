@@ -17,7 +17,7 @@ class RegisterScreenBloc extends Bloc<RegisterScreenEvent, RegisterScreenState> 
     on<RegisterServicesEvent>(_onRegisterServicesEvent);
   }
   _onRegisterAccountEvent(RegisterAccountEvent event,emit) async{
-    final result = await  _auth.CreateUser(event.username, event.password);
+    final result = await  _auth.createUser(event.username, event.password,event.name);
     switch(result) {
       case UserCreationResult.success:
         _coin.addCoins(event.username);
