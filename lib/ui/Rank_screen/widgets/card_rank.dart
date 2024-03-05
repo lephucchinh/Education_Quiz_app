@@ -19,7 +19,7 @@ class CardRank extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: press,
-      leading: Text('${index}'),
+      leading: Text('${index}',style: TextStyle(fontSize: 20),),
       title: Row(
         children: [
           CircleAvatar(
@@ -31,7 +31,7 @@ class CardRank extends StatelessWidget {
           Text(
             text,
             style:
-                TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+                TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
           ),
         ],
       ),

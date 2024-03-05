@@ -8,7 +8,7 @@ class AppState extends Equatable {
 
   AppState copyWith() {
     return AppState._(
-        );
+    );
   }
 
   @override

@@ -10,5 +10,5 @@ class Coins extends HiveObject {
   final int coin;
 
   Coins({required this.user, required this.coin});
-  
+
 }

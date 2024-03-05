@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:quizgames/ui/Rank_screen/widgets/card_rank.dart';
-import 'package:quizgames/ui/login_screen/Login_screen.dart';
 
 class RankScreen extends StatefulWidget {
   const RankScreen({super.key});
@@ -10,10 +9,22 @@ class RankScreen extends StatefulWidget {
 }
 
 class _RankScreenState extends State<RankScreen> {
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(Icons.arrow_back_ios_new)),
+        title: const Text(
+          'Coins Rankings',
+        ),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -22,56 +33,86 @@ class _RankScreenState extends State<RankScreen> {
                 height: size.height * 0.25,
                 width: size.width,
                 decoration: BoxDecoration(
-                  color: Color(0xFFABEBC6),
-                ),
-                child: Column(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(40),
+                      bottomRight: Radius.circular(40),
+                    )),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    Column(
                       children: [
-                        IconButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            icon: const Icon(Icons.arrow_back_ios_new)),
-                        const Text('Coins Rankings'),
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => LoginScreen()));
-                          },
-                          child: Ink(
-                            decoration: BoxDecoration(
-                              color: Colors.limeAccent,
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            width: 40,
-                            height: 40,
-                            child: Icon(Icons.output),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          margin: EdgeInsets.only(top: 40),
+                          width: 100,
+                          height: 120,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              CircleAvatar(
+                                child: Image.asset(
+                                    'assets/icons/icons8-avatar-96.png'),
+                                maxRadius: 40,
+                              ),
+                              Text('1')
+                            ],
                           ),
                         )
                       ],
                     ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      width: 100,
-                      height: 140,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          CircleAvatar(
-                            child: Image.asset('assets/icons/icons8-avatar-96.png'),
-                            maxRadius: 40,
+                    Column(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(top: 20),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20),
                           ),
-                          Text('1')
-                        ],
-                      ),
-                    )
+                          width: 100,
+                          height: 140,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              CircleAvatar(
+                                child: Image.asset(
+                                    'assets/icons/icons8-avatar-96.png'),
+                                maxRadius: 40,
+                              ),
+                              Text('1')
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(top: 40),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          width: 100,
+                          height: 120,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              CircleAvatar(
+                                child: Image.asset(
+                                    'assets/icons/icons8-avatar-96.png'),
+                                maxRadius: 40,
+                              ),
+                              Text('1')
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
                   ],
                 ),
               ),

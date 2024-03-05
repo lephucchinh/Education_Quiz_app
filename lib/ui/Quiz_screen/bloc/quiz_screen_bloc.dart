@@ -13,9 +13,8 @@ part 'quiz_screen_event.dart';
 part 'quiz_screen_state.dart';
 
 class QuizScreenBloc extends Bloc<QuizScreenEvent, QuizScreenState> {
-  final TotalCoinsServices _totalCoinsServices;
 
-  QuizScreenBloc(this._totalCoinsServices)
+  QuizScreenBloc()
       : super(const QuizScreenState.initial()) {
     on<StartTimer>(_onStartTimer);
     on<StopTimer>(_onStopTimer);
@@ -27,7 +26,6 @@ class QuizScreenBloc extends Bloc<QuizScreenEvent, QuizScreenState> {
     on<CountScore>(_onCountScore);
     on<ResetScore>(_onResetScore);
     on<ChooseNext>(_onChooseNext);
-    on<UpdateCoin>(_onUpdateCoin);
     on<RandomQuizBloc>(_onRandomQuizBloc);
   }
 
@@ -139,11 +137,6 @@ class QuizScreenBloc extends Bloc<QuizScreenEvent, QuizScreenState> {
     print('score: ${state.score}');
   }
 
-  _onUpdateCoin(UpdateCoin event, Emitter<QuizScreenState> emit) {
-    _totalCoinsServices.updateCoins(event.username, event.score);
-    print(event.username);
-    print(event.score);
-  }
 
   _onRandomQuizBloc(RandomQuizBloc event, Emitter<QuizScreenState> emit) {
 

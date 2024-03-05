@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quizgames/blocs/my_user_bloc/my_user_bloc.dart';
 import 'package:quizgames/ui/Quiz_screen/Quiz_screen.dart';
 import 'package:quizgames/ui/Quiz_screen/bloc/quiz_screen_bloc.dart';
 
+import '../../blocs/Update_Coin_Bloc/update_coin_bloc.dart';
+import '../../blocs/authentication_bloc/authentication_bloc.dart';
 import '../../services/total_coins.dart';
 
 class ResultScreen extends StatelessWidget {
   final int score;
-  final int coin;
 
-  const ResultScreen({super.key, required this.score, required this.coin});
+  const ResultScreen({
+    super.key,
+    required this.score,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,17 +22,15 @@ class ResultScreen extends StatelessWidget {
         .of(context)
         .size;
     return BlocProvider(
-      create: (context) =>
-          QuizScreenBloc(RepositoryProvider.of<TotalCoinsServices>(context)),
+      create: (context) => QuizScreenBloc(),
       child: BlocBuilder<QuizScreenBloc, QuizScreenState>(
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(
               leading: IconButton(
-                  onPressed: () async {
+                  onPressed: () {
                     Navigator.pop(context);
                     context.read<QuizScreenBloc>().add(ResetScore());
-                    context.read<QuizScreenBloc>().add(StopTimer());
                   },
                   icon: Icon(Icons.arrow_back_ios_new)),
             ),
@@ -37,7 +40,8 @@ class ResultScreen extends StatelessWidget {
                 children: [
                   Text(
                     'Quiz Result',
-                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontSize: 25, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(
                     height: 45,
@@ -53,7 +57,8 @@ class ResultScreen extends StatelessWidget {
                             width: size.width * 0.9,
                             height: 180,
                             decoration: BoxDecoration(
-                              color: Colors.lightBlueAccent.withOpacity(0.3),
+                              color:
+                              Colors.lightBlueAccent.withOpacity(0.3),
                               borderRadius: BorderRadius.circular(30),
                             ),
                           ),
@@ -72,7 +77,8 @@ class ResultScreen extends StatelessWidget {
                             Text(
                               'Congratulations!',
                               style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ],
                         ),
@@ -105,7 +111,7 @@ class ResultScreen extends StatelessWidget {
                   RichText(
                       text: TextSpan(children: [
                         TextSpan(
-                            text: '$score',
+                            text: '${score}',
                             style: TextStyle(
                                 color: Colors.indigo,
                                 fontWeight: FontWeight.bold,
@@ -135,7 +141,7 @@ class ResultScreen extends StatelessWidget {
                         'assets/icons/dollar.png',
                         width: 35,
                       ),
-                      Text('$coin',
+                      Text('${score}',
                           style: TextStyle(
                               color: Colors.black54,
                               fontWeight: FontWeight.bold,
@@ -149,7 +155,7 @@ class ResultScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                        width: 160,
+                        width: 140,
                         height: 50,
                         decoration: BoxDecoration(
                           color: Colors.pinkAccent.withOpacity(0.2),
@@ -165,7 +171,7 @@ class ResultScreen extends StatelessWidget {
                         width: 40,
                       ),
                       Container(
-                        width: 160,
+                        width: 140,
                         height: 50,
                         decoration: BoxDecoration(
                           color: Colors.purpleAccent.withOpacity(0.2),

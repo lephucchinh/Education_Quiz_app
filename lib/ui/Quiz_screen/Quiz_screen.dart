@@ -7,41 +7,49 @@ import 'package:quizgames/ui/Quiz_screen/widgets/Question_card.dart';
 import 'package:quizgames/ui/Quiz_screen/widgets/options_list.dart';
 import 'package:quizgames/ui/Quiz_screen/Result_Screen.dart';
 
+import '../../blocs/Update_Coin_Bloc/update_coin_bloc.dart';
+import '../../blocs/authentication_bloc/authentication_bloc.dart';
+import '../../blocs/my_user_bloc/my_user_bloc.dart';
 import 'widgets/progress_bar.dart';
 
 class QuizScreen extends StatefulWidget {
-  final String username;
-
-  const QuizScreen({super.key, required this.username});
+  const QuizScreen({
+    super.key,
+  });
 
   @override
   State<QuizScreen> createState() => _QuizScreenState();
 }
 
 class _QuizScreenState extends State<QuizScreen> {
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return BlocProvider(
-      create: (context) =>
-          QuizScreenBloc(RepositoryProvider.of<TotalCoinsServices>(context)),
+      create: (context) => QuizScreenBloc(),
       child: SafeArea(
         child: BlocConsumer<QuizScreenBloc, QuizScreenState>(
           listener: (context, state) async {
             if (state.time == 50) {
-              context.read<QuizScreenBloc>().add(
-                  UpdateCoin(score: state.score, username: widget.username));
+              setState(() {
+                context.read<UpdateCoinBloc>().add(UpdateCoins(
+                      score: state.score,
+                      userId: context.read<AuthenticationBloc>().state.user!.uid,
+                    ));
+              });
               await Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                     builder: (_) => ResultScreen(
                           score: state.score,
-                          coin: state.score * 10,
                         )),
               );
 
               context.read<QuizScreenBloc>().add(ResetChooseOption());
-              context.read<QuizScreenBloc>().add(ProgressQuestionsReset());
+              context
+                  .read<QuizScreenBloc>()
+                  .add(ProgressQuestionsReset());
               context.read<QuizScreenBloc>().add(StopTimer());
             }
           },
@@ -65,7 +73,9 @@ class _QuizScreenState extends State<QuizScreen> {
                             context
                                 .read<QuizScreenBloc>()
                                 .add(ProgressQuestionsReset());
-                            context.read<QuizScreenBloc>().add(StopTimer());
+                            context
+                                .read<QuizScreenBloc>()
+                                .add(StopTimer());
                             Navigator.pop(context);
                             print('pop');
                           },
@@ -97,25 +107,38 @@ class _QuizScreenState extends State<QuizScreen> {
                             onTap: () async {
                               if (state.progressQuestion + 1 ==
                                   sample_data.length) {
-                                context.read<QuizScreenBloc>().add(UpdateCoin(
-                                    score: state.score,
-                                    username: widget.username));
-                                await Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => ResultScreen(
-                                            score: state.score,
-                                            coin: state.score * 10,
-                                          )),
-                                );
+                                context
+                                    .read<UpdateCoinBloc>()
+                                    .add(UpdateCoins(
+                                      score: state.score,
+                                      userId: context
+                                          .read<AuthenticationBloc>()
+                                          .state
+                                          .user!
+                                          .uid,
+                                    ));
+
+                                context
+                                    .read<QuizScreenBloc>()
+                                    .add(StopTimer());
                                 context
                                     .read<QuizScreenBloc>()
                                     .add(ResetChooseOption());
                                 context
                                     .read<QuizScreenBloc>()
                                     .add(ProgressQuestionsReset());
-                                context.read<QuizScreenBloc>().add(StopTimer());
+                                context
+                                    .read<QuizScreenBloc>()
+                                    .add(StopTimer());
+                                await Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => ResultScreen(
+                                            score: state.score,
+                                          )),
+                                );
                               }
+
                               setState(() {
                                 context
                                     .read<QuizScreenBloc>()

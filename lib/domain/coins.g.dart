@@ -38,7 +38,7 @@ class CoinsAdapter extends TypeAdapter<Coins> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is CoinsAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+          other is CoinsAdapter &&
+              runtimeType == other.runtimeType &&
+              typeId == other.typeId;
 }

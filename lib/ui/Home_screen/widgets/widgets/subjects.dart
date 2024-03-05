@@ -4,13 +4,17 @@ class Subjects extends StatelessWidget {
   final String text;
   final String image;
   final Function() press;
-  const Subjects({super.key, required this.text, required this.image, required this.press});
+
+  const Subjects(
+      {super.key,
+      required this.text,
+      required this.image,
+      required this.press});
 
   @override
   Widget build(BuildContext context) {
     return Card(
       margin: EdgeInsets.symmetric(vertical: 7),
-      color: Colors.white,
       child: ListTile(
         onTap: press,
         leading: Image.asset(image),
