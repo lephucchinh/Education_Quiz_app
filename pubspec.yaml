@@ -51,13 +51,16 @@ dependencies:
   image_picker: ^1.0.7
   # khi sử dụng đối vs android bắt buộc phải cấp quyền vào AndroidManifest.xml
   image_cropper: ^5.0.1
+  intl: ^0.19.0
 
 
   # Custom Repositories
   user_repository:
     path: packages/user_repository
-  coin_repository:
-    path: packages/coin_repository
+  post_repository:
+    path: packages/post_repository
+  comment_repository:
+    path: packages/comment_repository
 
 
   # The following adds the Cupertino Icons font to your application.

@@ -23,8 +23,6 @@ abstract class UserRepository {
 
   Future <String> uploadCoins(String coin, String userId);
 
-  Future <List<Map<String,dynamic>>> fetchTopUsers();
-
   Future<List<Map<String, dynamic>>> fetchAllUsers();
 
 }

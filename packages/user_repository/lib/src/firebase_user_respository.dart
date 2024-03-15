@@ -122,38 +122,6 @@ class FireBaseUserRepository implements UserRepository {
   }
 
   @override
-  Future<List<Map<String, dynamic>>> fetchTopUsers() async {
-
-    List<Map<String, dynamic>> userListTop = [];
-    try {
-      QuerySnapshot querySnapshot = await usersCollection
-          .orderBy('coin', descending: true)
-          .limit(3)
-          .get();
-
-      // Số hạng ban đầu
-      int rank = 1;
-
-      querySnapshot.docs.forEach((doc) {
-        // Chuyển đổi dữ liệu người dùng thành một Map chỉ chứa tên, điểm và số hạng
-        Map<String, dynamic> userData = {
-          'rank': rank, // Số hạng của người dùng
-          'name': (doc.data() as Map<String,dynamic>)['name'], // Tên của người dùng
-          'score': (doc.data() as Map<String,dynamic>)['score'], // Điểm của người dùng
-        };
-        // Thêm Map này vào danh sách người dùng
-        userListTop.add(userData);
-        // Tăng số hạng lên mỗi lần lặp
-        rank++;
-      });
-      return userListTop;
-    } catch (e) {
-      log(e.toString());
-      rethrow;
-    }
-  }
-
-  @override
   Future<List<Map<String, dynamic>>> fetchAllUsers() async {
     try {
       // Lấy tất cả người dùng từ Firestore và sắp xếp theo điểm số giảm dần

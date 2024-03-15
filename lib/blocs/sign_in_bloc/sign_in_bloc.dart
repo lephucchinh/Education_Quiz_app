@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
-import 'package:coin_repository/coin_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:user_repository/user_repository.dart';
 

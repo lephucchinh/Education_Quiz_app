@@ -1,11 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:quizgames/blocs/authentication_bloc/authentication_bloc.dart';
-import 'package:quizgames/ui/Home_screen/bloc/home_screen_bloc.dart';
 import 'package:quizgames/ui/Quiz_screen/Quiz_screen.dart';
-import 'package:quizgames/ui/Quiz_screen/bloc/quiz_screen_bloc.dart';
-
-import '../../../blocs/Update_Coin_Bloc/update_coin_bloc.dart';
 import 'widgets/subjects.dart';
 
 class ListCardSubjects extends StatelessWidget {

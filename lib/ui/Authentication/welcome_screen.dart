@@ -1,4 +1,3 @@
-import 'package:coin_repository/coin_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quizgames/blocs/authentication_bloc/authentication_bloc.dart';
