@@ -9,6 +9,7 @@ class Post {
   MyUser myUser;
   int likes;
   List<String> likedBy;
+  int numberComments;
 
 
   Post({
@@ -18,6 +19,7 @@ class Post {
     required this.myUser,
     required this.likes,
     required this.likedBy,
+    required this.numberComments
   });
 
   // Empty user which is represents an authenticated user
@@ -28,6 +30,7 @@ class Post {
     createAt: DateTime.now(),
     likes: 0,
     likedBy: List<String>.empty().toList(),
+    numberComments: 0,
   );
 
   // modify MyUser parameters
@@ -38,6 +41,7 @@ class Post {
     DateTime? createAt,
     int? likes,
     List<String>? likedBy,
+    int? numberComments,
   }) {
     return Post(
       postID: postID ?? this.postID,
@@ -46,6 +50,7 @@ class Post {
       createAt: createAt ?? this.createAt,
       likes: likes ?? this.likes,
       likedBy: likedBy ?? this.likedBy,
+      numberComments: numberComments ?? this.numberComments,
     );
   }
 
@@ -63,6 +68,7 @@ class Post {
       createAt: createAt,
       likes: likes,
       likedBy: likedBy,
+      numberComments: numberComments,
     );
   }
 
@@ -74,8 +80,9 @@ class Post {
       createAt: entity.createAt,
       likes: entity.likes,
       likedBy: entity.likedBy,
+      numberComments: entity.numberComments,
     );
   }
 
-  List<Object?> get props => [postID, myUser, post,createAt,likes,likedBy];
+  List<Object?> get props => [postID, myUser, post,createAt,likes,likedBy,numberComments];
 }

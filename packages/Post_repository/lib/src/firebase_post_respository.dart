@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:comment_repository/comment_repository.dart';
 import 'package:post_repository/post_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -28,9 +29,11 @@ class FireBasePostRepository implements PostRepository {
   Future<List<Post>> getPost() {
     try {
       return postCollection.orderBy('createAt', descending: true).get().then(
-          (value) => value.docs
-              .map((e) => Post.fromEntity(PostEntity.fromDocument(e.data())))
-              .toList());
+              (value) =>
+              value.docs
+                  .map((e) =>
+                  Post.fromEntity(PostEntity.fromDocument(e.data())))
+                  .toList());
     } catch (e) {
       log(e.toString());
       rethrow;
@@ -38,16 +41,35 @@ class FireBasePostRepository implements PostRepository {
   }
 
   @override
-  Future<void> deletePost(String userID) async {
+  Future<void> deletePost(String postID) async {
     try {
-      await postCollection
-          .where("postID", isEqualTo: userID)
+      await FirebaseFirestore.instance
+          .collection("Comments")
+          .doc(postID)
+          .collection("comment_In_Post")
           .get()
           .then((querySnapshot) {
-        querySnapshot.docs.forEach((element) {
-          element.reference.delete();
+        querySnapshot.docs.forEach((doc) {
+          doc.reference.delete();
         });
       });
+
+// Sau khi xóa tất cả các documents con, bạn có thể xóa document cha
+      await FirebaseFirestore.instance
+          .collection("Comments")
+          .doc(postID)
+          .delete();
+
+      await postCollection.doc(postID).delete();
+
+      // await postCollection
+      //     .where("postID", isEqualTo: postID)
+      //     .get()
+      //     .then((querySnapshot) {
+      //   querySnapshot.docs.forEach((element) {
+      //     element.reference.delete();
+      //   });
+      // });
     } catch (e) {
       log(e.toString());
       rethrow;
@@ -58,7 +80,8 @@ class FireBasePostRepository implements PostRepository {
   Future<void> likesPost(String postID, String userID) async {
     try {
       Post post = await postCollection.doc(postID).get().then(
-          (value) => Post.fromEntity(PostEntity.fromDocument(value.data()!)));
+              (value) =>
+              Post.fromEntity(PostEntity.fromDocument(value.data()!)));
       int like = post.likes + 1;
       List<String> likedBy = List<String>.from(post.likedBy);
       likedBy.add(userID);
@@ -75,7 +98,8 @@ class FireBasePostRepository implements PostRepository {
   Future<void> unlikesPost(String postID, String userID) async {
     try {
       Post post = await postCollection.doc(postID).get().then(
-          (value) => Post.fromEntity(PostEntity.fromDocument(value.data()!)));
+              (value) =>
+              Post.fromEntity(PostEntity.fromDocument(value.data()!)));
       int like = post.likes - 1;
 
       List<String> updatedLikedBy = List<String>.from(post.likedBy);
@@ -85,6 +109,20 @@ class FireBasePostRepository implements PostRepository {
           .doc(postID)
           .update({"likes": like, "likedBy": updatedLikedBy});
     } catch (e) {
+      log(e.toString());
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> increaseNumberComment(String postID) async {
+    try {
+      Post post = await postCollection.doc(postID).get().then((value) =>
+          Post.fromEntity(PostEntity.fromDocument(value.data()!)));
+      int numberComment = post.numberComments + 1;
+      await postCollection.doc(postID).update({"numberComments": numberComment});
+    }
+    catch (e) {
       log(e.toString());
       rethrow;
     }

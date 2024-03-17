@@ -7,6 +7,7 @@ class PostEntity {
   MyUser myUser;
   DateTime createAt;
   int likes;
+  int numberComments;
   List<String> likedBy;
 
   PostEntity({
@@ -16,6 +17,7 @@ class PostEntity {
     required this.createAt,
     required this.likes,
     required this.likedBy,
+    required this.numberComments,
   });
 
   Map<String, Object?> toDocument() {
@@ -26,6 +28,7 @@ class PostEntity {
       'createAt': createAt,
       'likes' : likes,
       'likedBy' : likedBy,
+      'numberComments' : numberComments,
     };
   }
 
@@ -39,12 +42,13 @@ class PostEntity {
             ? (doc['createAt'] as Timestamp).toDate()
             : DateTime.now(),
         likes: doc["likes"] as int,
-      likedBy: List<String>.from(doc['likedBy']) ?? []
+      likedBy: List<String>.from(doc['likedBy']) ?? [],
+        numberComments: doc["numberComments"] as int,
     );
   }
 
   @override
-  List<Object?> get props => [postID, myUser, post, createAt,likedBy];
+  List<Object?> get props => [postID, myUser, post, createAt,likedBy,numberComments];
 
   @override
   String toString() {
@@ -55,6 +59,7 @@ class PostEntity {
       createAt: $createAt
       likes: $likes
       likedBy: $likedBy
+      numberComments: $numberComments
     }''';
   }
 }

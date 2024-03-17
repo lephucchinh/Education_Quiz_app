@@ -1,20 +1,24 @@
+import 'package:comment_repository/comment_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:post_repository/post_repository.dart';
 import 'package:quizgames/blocs/authentication_bloc/authentication_bloc.dart';
+import 'package:quizgames/blocs/create_comment_post_bloc/create_comment_post_bloc.dart';
 import 'package:quizgames/blocs/delete_post_bloc/delete_post_bloc.dart';
 import 'package:quizgames/blocs/likes_Post/likes_post_bloc.dart';
 import 'package:quizgames/ui/social_network_screen/Comment_bottomsheet_screen/widget/commentsUser.dart';
 import 'package:user_repository/user_repository.dart';
 
+import '../../../blocs/get_comment_post_bloc/get_comment_post_bloc.dart';
 import '../../../blocs/get_post_bloc/get_post_bloc.dart';
 import '../Comment_bottomsheet_screen/CommentBottomsheetScreen.dart';
 
 class ChatPost extends StatefulWidget {
   final Post post;
+  final MyUser myUser;
 
-  const ChatPost({super.key, required this.post});
+  const ChatPost({super.key, required this.post, required this.myUser});
 
   @override
   State<ChatPost> createState() => _ChatPostState();
@@ -59,7 +63,7 @@ class _ChatPostState extends State<ChatPost> {
                     child: IconButton(
                       onPressed: () {
                         context.read<DeletePostBloc>().add(DeletePost(
-                            userID: widget.post.postID,
+                            postID: widget.post.postID,
                             myId: widget.post.myUser.id));
                       },
                       icon: const Icon(Icons.delete_outline),
@@ -122,10 +126,33 @@ class _ChatPostState extends State<ChatPost> {
                       IconButton(
                           onPressed: () {
                             showModalBottomSheet(
+                                isScrollControlled: true,
                                 context: context,
                                 isDismissible: true,
                                 builder: (BuildContext context) {
-                                  return CommentBottomSheetScreen(myUser: widget.post.myUser,);
+                                  return MultiBlocProvider(
+                                    providers: [
+                                      BlocProvider(
+                                        create: (context) =>
+                                            CreateCommentPostBloc(
+                                                myCommentRepository:
+                                                    FirebaseCommentRepository(),
+                                                myPostRepository:
+                                                    FireBasePostRepository()),
+                                      ),
+                                      BlocProvider(
+                                        create: (context) => GetCommentPostBloc(
+                                            myCommentRepository:
+                                                FirebaseCommentRepository())
+                                          ..add(GetCommentPost(
+                                              postId: widget.post.postID)),
+                                      ),
+                                    ],
+                                    child: CommentBottomSheetScreen(
+                                      myUser: widget.myUser,
+                                      post: widget.post,
+                                    ),
+                                  );
                                 });
                           },
                           icon: const Icon(
@@ -147,7 +174,7 @@ class _ChatPostState extends State<ChatPost> {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Text('0 bình luận.'),
+                    child: Text('${widget.post.numberComments} bình luận.'),
                   ),
                 ],
               )
@@ -158,5 +185,3 @@ class _ChatPostState extends State<ChatPost> {
     );
   }
 }
-
-

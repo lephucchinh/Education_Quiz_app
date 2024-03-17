@@ -22,10 +22,10 @@ class Comment {
   });
 
   static final empty = Comment(
-    commentID: "",
-    comment: "",
+    commentID: '',
+    comment: '',
     myUser: MyUser.empty,
-    postID: "",
+    postID: '',
     numberComments: 0,
     commentBy: List<String>.empty().toList(),
     createAt: DateTime.now(),

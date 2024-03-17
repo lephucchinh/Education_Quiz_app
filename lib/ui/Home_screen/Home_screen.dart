@@ -1,3 +1,4 @@
+import 'package:comment_repository/comment_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:post_repository/post_repository.dart';
@@ -46,8 +47,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         providers: [
                           BlocProvider(
                             create: (context) => DeletePostBloc(
-                                myPostRepository: FireBasePostRepository()),
+                                myPostRepository: FireBasePostRepository(),
+                                ),
                           ),
+
                         ],
                         child: SocialNetworkScreen(
                             myUser: context.read<MyUserBloc>().state.user!),

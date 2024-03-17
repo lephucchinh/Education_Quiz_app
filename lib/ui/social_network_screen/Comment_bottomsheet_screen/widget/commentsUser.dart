@@ -1,7 +1,14 @@
+import 'package:comment_repository/comment_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class CommentsUser extends StatefulWidget {
-  const CommentsUser({super.key});
+  final Comment comment;
+
+  const CommentsUser({
+    super.key,
+    required this.comment,
+  });
 
   @override
   State<CommentsUser> createState() => _CommentsUserState();
@@ -27,19 +34,23 @@ class _CommentsUserState extends State<CommentsUser> {
                     color: Colors.grey,
                     shape: BoxShape.circle,
                     image: DecorationImage(
-                        image: NetworkImage(
-                            "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.vietnamworks.com%2Fhrinsider%2Fanh-dai-dien-facebook-y-nghia.html&psig=AOvVaw1cNGSb2TC98SSx2JW_ZE4R&ust=1710485719130000&source=images&cd=vfe&opi=89978449&ved=0CBMQjRxqFwoTCJjCp_-V84QDFQAAAAAdAAAAABAE"),
+                        image: NetworkImage(widget.comment.myUser.picture!),
                         fit: BoxFit.fill),
                   ),
                 ),
                 title: Row(
                   children: [
                     Text(
-                      "name",
+                      widget.comment.myUser.name,
                       style: const TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 18),
                     ),
-                    Text("date"),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      DateFormat('yyyy-MM-dd').format(widget.comment.createAt),
+                    ),
                   ],
                 ),
                 trailing: IconButton(
@@ -55,7 +66,7 @@ class _CommentsUserState extends State<CommentsUser> {
                         )
                       : const Icon(Icons.favorite_border),
                 ),
-                subtitle: Text('comments')),
+                subtitle: Text(widget.comment.comment)),
             const SizedBox(height: 10),
           ],
         ),

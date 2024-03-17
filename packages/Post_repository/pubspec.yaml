@@ -21,6 +21,8 @@ dependencies:
 
   user_repository:
     path: ../user_repository
+  comment_repository:
+    path: ../comment_repository
 
 dev_dependencies:
   flutter_test:

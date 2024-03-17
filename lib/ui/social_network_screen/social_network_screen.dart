@@ -97,6 +97,7 @@ class _SocialNetworkScreenState extends State<SocialNetworkScreen> {
                     children: [
                       ChatPost(
                         post: state.posts[index],
+                        myUser:  widget.myUser,
                       ),
                       if (index == state.posts.length - 1)
                         SizedBox(
