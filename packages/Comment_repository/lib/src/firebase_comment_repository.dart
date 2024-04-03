@@ -51,15 +51,68 @@ class FirebaseCommentRepository implements CommentRepository {
   }
 
   @override
-  Future<void> likesComment(String commentID, String userID) {
-    // TODO: implement likesComment
-    throw UnimplementedError();
+  Future<Comment> likesComment(
+      String commentID, String postID, String userID) async {
+    try {
+      String commentPath = "$postID/comment_In_Post/$commentID";
+      DocumentSnapshot commentSnapshot = await commentCollection.doc(commentPath).get();
+      Map<String, dynamic>? commentData = commentSnapshot.data() as Map<String, dynamic>?;
+      Comment comment = Comment.fromEntity(CommentEntity.fromDocument(commentData!));
+
+      int like = comment.numberLikes + 1;
+
+      List<String> userLikes = List<String>.from(comment.userLikes);
+      userLikes.add(userID);
+      await commentCollection
+          .doc(postID)
+          .collection("comment_In_Post")
+          .doc(commentID)
+          .update({"numberLikes": like, "userLikes": userLikes});
+      Comment commentNew = await commentCollection
+          .doc(postID)
+          .collection("comment_In_Post")
+          .doc(commentID)
+          .get()
+          .then((value) =>
+          Comment.fromEntity(CommentEntity.fromDocument(value.data()!)));
+      return commentNew;
+    } catch (e) {
+      log(e.toString());
+      rethrow;
+    }
   }
 
   @override
-  Future<void> unlikesComment(String commentID, String userID) {
-    // TODO: implement unlikesComment
-    throw UnimplementedError();
+  // kinh nghiệm bắt buộc tạo biến phải tuân theo nguyên tắc!!!!!.
+  Future<Comment> unlikesComment(
+      String commentID, String postID, String userID) async {
+    try {
+      Comment comment = await commentCollection
+          .doc(postID)
+          .collection("comment_In_Post")
+          .doc(commentID)
+          .get()
+          .then((value) =>
+              Comment.fromEntity(CommentEntity.fromDocument(value.data()!)));
+      int like = comment.numberLikes - 1;
+      List<String> userLikes = List<String>.from(comment.userLikes);
+      userLikes.remove(userID);
+      await commentCollection
+          .doc(postID)
+          .collection("comment_In_Post")
+          .doc(commentID)
+          .update({"numberLikes": like, "userLikes": userLikes});
+      Comment commentNew = await commentCollection
+          .doc(postID)
+          .collection("comment_In_Post")
+          .doc(commentID)
+          .get()
+          .then((value) =>
+          Comment.fromEntity(CommentEntity.fromDocument(value.data()!)));
+      return commentNew;
+    } catch (e) {
+      log(e.toString());
+      rethrow;
+    }
   }
-
 }

@@ -1,6 +1,11 @@
 import 'package:comment_repository/comment_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:quizgames/blocs/authentication_bloc/authentication_bloc.dart';
+import 'package:quizgames/blocs/get_comment_post_bloc/get_comment_post_bloc.dart';
+import 'package:quizgames/blocs/like_comment_post_bloc/like_comment_post_bloc.dart';
+import 'package:quizgames/blocs/like_comment_post_bloc/like_comment_post_bloc.dart';
 
 class CommentsUser extends StatefulWidget {
   final Comment comment;
@@ -19,58 +24,129 @@ class _CommentsUserState extends State<CommentsUser> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ListTile(
-                leading: Container(
-                  width: 50,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: Colors.grey,
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                        image: NetworkImage(widget.comment.myUser.picture!),
-                        fit: BoxFit.fill),
-                  ),
-                ),
-                title: Row(
+    return BlocBuilder<LikeCommentPostBloc, LikeCommentPostState>(
+      builder: (context, state) {
+        return Container(
+          width: double.infinity,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 30),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      widget.comment.myUser.name,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 18),
+                    SizedBox(
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 50,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              color: Colors.grey,
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                  image:
+                                  NetworkImage(widget.comment.myUser.picture!),
+                                  fit: BoxFit.fill),
+                            ),
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    widget.comment.myUser.name,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18),
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    DateFormat('yyyy-MM-dd')
+                                        .format(widget.comment.createAt),
+                                  ),
+                                ],
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 10),
+                                child: Text(widget.comment.comment),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
                     ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      DateFormat('yyyy-MM-dd').format(widget.comment.createAt),
-                    ),
+                    Column(
+                      children: [
+                        IconButton(
+                            onPressed: () {
+                              if (widget.comment.userLikes.contains(context
+                                  .read<AuthenticationBloc>()
+                                  .state
+                                  .user
+                                  ?.uid)) {
+                                context.read<LikeCommentPostBloc>().add(
+                                    UnlikeCommentPost(
+                                        userID: context
+                                            .read<AuthenticationBloc>()
+                                            .state
+                                            .user!
+                                            .uid,
+                                        postID: widget.comment.postID,
+                                        commentID: widget.comment.commentID));
+                              } else {
+                                context.read<LikeCommentPostBloc>().add(
+                                    LikeCommentPost(
+                                        userID: context
+                                            .read<AuthenticationBloc>()
+                                            .state
+                                            .user!
+                                            .uid,
+                                        postID: widget.comment.postID,
+                                        commentID: widget.comment.commentID));
+                              }
+                            },
+                            icon: widget.comment.userLikes.contains(context
+                                .read<AuthenticationBloc>()
+                                .state
+                                .user
+                                ?.uid)
+                                ? const Icon(
+
+                              Icons.favorite,
+                              color: Colors.red,
+                            )
+                                : const Icon(Icons.favorite_border)),
+                        BlocListener<LikeCommentPostBloc, LikeCommentPostState>(
+                          listener: (context, state) {
+                            if(state is LikeCommentPostSuccess){
+                              widget.comment.userLikes = state.commentNew.userLikes;
+                              widget.comment.numberLikes = state.commentNew.numberLikes;
+                            } else if(state is UnlikeCommentPostSuccess){
+                              widget.comment.userLikes = state.commentNew.userLikes;
+                              widget.comment.numberLikes = state.commentNew.numberLikes;
+                            }
+                          },
+                          child: Text("${widget.comment.numberLikes}"),
+                        ),
+                      ],
+                    )
                   ],
                 ),
-                trailing: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      favorite = !favorite;
-                    });
-                  },
-                  icon: favorite == true
-                      ? const Icon(
-                          Icons.favorite,
-                          color: Colors.red,
-                        )
-                      : const Icon(Icons.favorite_border),
-                ),
-                subtitle: Text(widget.comment.comment)),
-            const SizedBox(height: 10),
-          ],
-        ),
-      ),
+                Text('0 bình luận'),
+                const SizedBox(height: 30),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

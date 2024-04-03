@@ -10,7 +10,6 @@ import 'post_repo.dart';
 
 class FireBasePostRepository implements PostRepository {
   final postCollection = FirebaseFirestore.instance.collection('Posts');
-
   @override
   Future<Post> createPost(Post post) async {
     try {
@@ -24,22 +23,18 @@ class FireBasePostRepository implements PostRepository {
       rethrow;
     }
   }
-
   @override
   Future<List<Post>> getPost() {
     try {
       return postCollection.orderBy('createAt', descending: true).get().then(
-              (value) =>
-              value.docs
-                  .map((e) =>
-                  Post.fromEntity(PostEntity.fromDocument(e.data())))
-                  .toList());
+          (value) => value.docs
+              .map((e) => Post.fromEntity(PostEntity.fromDocument(e.data())))
+              .toList());
     } catch (e) {
       log(e.toString());
       rethrow;
     }
   }
-
   @override
   Future<void> deletePost(String postID) async {
     try {
@@ -61,7 +56,6 @@ class FireBasePostRepository implements PostRepository {
           .delete();
 
       await postCollection.doc(postID).delete();
-
       // await postCollection
       //     .where("postID", isEqualTo: postID)
       //     .get()
@@ -75,13 +69,11 @@ class FireBasePostRepository implements PostRepository {
       rethrow;
     }
   }
-
   @override
   Future<void> likesPost(String postID, String userID) async {
     try {
       Post post = await postCollection.doc(postID).get().then(
-              (value) =>
-              Post.fromEntity(PostEntity.fromDocument(value.data()!)));
+          (value) => Post.fromEntity(PostEntity.fromDocument(value.data()!)));
       int like = post.likes + 1;
       List<String> likedBy = List<String>.from(post.likedBy);
       likedBy.add(userID);
@@ -93,13 +85,11 @@ class FireBasePostRepository implements PostRepository {
       rethrow;
     }
   }
-
   @override
   Future<void> unlikesPost(String postID, String userID) async {
     try {
       Post post = await postCollection.doc(postID).get().then(
-              (value) =>
-              Post.fromEntity(PostEntity.fromDocument(value.data()!)));
+          (value) => Post.fromEntity(PostEntity.fromDocument(value.data()!)));
       int like = post.likes - 1;
 
       List<String> updatedLikedBy = List<String>.from(post.likedBy);
@@ -113,16 +103,16 @@ class FireBasePostRepository implements PostRepository {
       rethrow;
     }
   }
-
   @override
   Future<void> increaseNumberComment(String postID) async {
     try {
-      Post post = await postCollection.doc(postID).get().then((value) =>
-          Post.fromEntity(PostEntity.fromDocument(value.data()!)));
+      Post post = await postCollection.doc(postID).get().then(
+          (value) => Post.fromEntity(PostEntity.fromDocument(value.data()!)));
       int numberComment = post.numberComments + 1;
-      await postCollection.doc(postID).update({"numberComments": numberComment});
-    }
-    catch (e) {
+      await postCollection
+          .doc(postID)
+          .update({"numberComments": numberComment});
+    } catch (e) {
       log(e.toString());
       rethrow;
     }

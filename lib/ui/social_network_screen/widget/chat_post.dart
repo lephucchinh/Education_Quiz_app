@@ -125,35 +125,7 @@ class _ChatPostState extends State<ChatPost> {
                       ),
                       IconButton(
                           onPressed: () {
-                            showModalBottomSheet(
-                                isScrollControlled: true,
-                                context: context,
-                                isDismissible: true,
-                                builder: (BuildContext context) {
-                                  return MultiBlocProvider(
-                                    providers: [
-                                      BlocProvider(
-                                        create: (context) =>
-                                            CreateCommentPostBloc(
-                                                myCommentRepository:
-                                                    FirebaseCommentRepository(),
-                                                myPostRepository:
-                                                    FireBasePostRepository()),
-                                      ),
-                                      BlocProvider(
-                                        create: (context) => GetCommentPostBloc(
-                                            myCommentRepository:
-                                                FirebaseCommentRepository())
-                                          ..add(GetCommentPost(
-                                              postId: widget.post.postID)),
-                                      ),
-                                    ],
-                                    child: CommentBottomSheetScreen(
-                                      myUser: widget.myUser,
-                                      post: widget.post,
-                                    ),
-                                  );
-                                });
+                            buildShowModalBottomSheet(context);
                           },
                           icon: const Icon(
                             Icons.messenger_outline,
@@ -174,7 +146,11 @@ class _ChatPostState extends State<ChatPost> {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Text('${widget.post.numberComments} bình luận.'),
+                    child: GestureDetector(
+                        onTap: () {
+                          buildShowModalBottomSheet(context);
+                        },
+                        child: Text('${widget.post.numberComments} bình luận.')),
                   ),
                 ],
               )
@@ -183,5 +159,37 @@ class _ChatPostState extends State<ChatPost> {
         ),
       ),
     );
+  }
+
+  Future<dynamic> buildShowModalBottomSheet(BuildContext context) {
+    return showModalBottomSheet(
+                              isScrollControlled: true,
+                              context: context,
+                              isDismissible: true,
+                              builder: (BuildContext context) {
+                                return MultiBlocProvider(
+                                  providers: [
+                                    BlocProvider(
+                                      create: (context) =>
+                                          CreateCommentPostBloc(
+                                              myCommentRepository:
+                                                  FirebaseCommentRepository(),
+                                              myPostRepository:
+                                                  FireBasePostRepository()),
+                                    ),
+                                    BlocProvider(
+                                      create: (context) => GetCommentPostBloc(
+                                          myCommentRepository:
+                                              FirebaseCommentRepository())
+                                        ..add(GetCommentPost(
+                                            postId: widget.post.postID)),
+                                    ),
+                                  ],
+                                  child: CommentBottomSheetScreen(
+                                    myUser: widget.myUser,
+                                    post: widget.post,
+                                  ),
+                                );
+                              });
   }
 }
