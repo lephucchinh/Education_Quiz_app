@@ -30,6 +30,25 @@ class FireBaseUserRepository implements UserRepository {
   }
 
   @override
+  Stream<List<MyUser>> get allUsers {
+
+    return user.map((currentUser) {
+      final currentUserId = currentUser!.uid;
+      return usersCollection.snapshots().map((snapshot) {
+        return snapshot.docs
+            .map((doc) =>
+            MyUser.fromEntity(MyUserEntity.fromDocument(doc.data())))
+            .where((user) => user.id != currentUserId)
+            .toList();
+      });
+    }).handleError((error) {
+      log('Error fetching all users: $error');
+      // Trả về một danh sách rỗng nếu có lỗi xảy ra
+      return Stream.value([]);
+    }).asyncExpand((stream) => stream);
+  }
+
+  @override
   Future<MyUser> signUp(MyUser myUser, String password) async {
     try {
       UserCredential user = await _firebaseAuth.createUserWithEmailAndPassword(
@@ -125,9 +144,8 @@ class FireBaseUserRepository implements UserRepository {
   Future<List<Map<String, dynamic>>> fetchAllUsers() async {
     try {
       // Lấy tất cả người dùng từ Firestore và sắp xếp theo điểm số giảm dần
-      QuerySnapshot querySnapshot = await usersCollection
-          .orderBy('coin', descending: true)
-          .get();
+      QuerySnapshot querySnapshot =
+          await usersCollection.orderBy('coin', descending: true).get();
 
       List<Map<String, dynamic>> userList = [];
       int rank = 1;
@@ -136,8 +154,8 @@ class FireBaseUserRepository implements UserRepository {
       querySnapshot.docs.forEach((doc) {
         Map<String, dynamic> userData = {
           'rank': rank,
-          'name': (doc.data() as Map<String,dynamic>)['name'],
-          'coin': (doc.data() as Map<String,dynamic>)['coin'],
+          'name': (doc.data() as Map<String, dynamic>)['name'],
+          'coin': (doc.data() as Map<String, dynamic>)['coin'],
         };
 
         userList.add(userData);
@@ -150,4 +168,5 @@ class FireBaseUserRepository implements UserRepository {
       return [];
     }
   }
+
 }

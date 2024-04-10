@@ -24,11 +24,11 @@ class FireBasePostRepository implements PostRepository {
     }
   }
   @override
-  Future<List<Post>> getPost() {
+  Stream<List<Post>> getPost() {
     try {
-      return postCollection.orderBy('createAt', descending: true).get().then(
-          (value) => value.docs
-              .map((e) => Post.fromEntity(PostEntity.fromDocument(e.data())))
+      return postCollection.orderBy('createAt', descending: true).snapshots().map(
+              (snapshot) => snapshot.docs
+              .map((doc) => Post.fromEntity(PostEntity.fromDocument(doc.data())))
               .toList());
     } catch (e) {
       log(e.toString());
@@ -109,6 +109,21 @@ class FireBasePostRepository implements PostRepository {
       Post post = await postCollection.doc(postID).get().then(
           (value) => Post.fromEntity(PostEntity.fromDocument(value.data()!)));
       int numberComment = post.numberComments + 1;
+      await postCollection
+          .doc(postID)
+          .update({"numberComments": numberComment});
+    } catch (e) {
+      log(e.toString());
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> decreaseNumberComment(String postID) async {
+    try {
+      Post post = await postCollection.doc(postID).get().then(
+              (value) => Post.fromEntity(PostEntity.fromDocument(value.data()!)));
+      int numberComment = post.numberComments - 1;
       await postCollection
           .doc(postID)
           .update({"numberComments": numberComment});

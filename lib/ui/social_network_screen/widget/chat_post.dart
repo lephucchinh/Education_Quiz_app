@@ -40,17 +40,27 @@ class _ChatPostState extends State<ChatPost> {
             children: [
               Card(
                 child: ListTile(
-                  leading: Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: Colors.grey,
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                          image: NetworkImage(widget.post.myUser.picture!),
-                          fit: BoxFit.fill),
-                    ),
-                  ),
+                  leading: widget.post.myUser.picture!.isNotEmpty
+                      ? Container(
+                          width: 50,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color: Colors.grey,
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                                image:
+                                    NetworkImage(widget.post.myUser.picture!),
+                                fit: BoxFit.fill),
+                          ),
+                        )
+                      : Container(
+                          width: 50,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color: Colors.grey,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
                   title: Text(
                     widget.post.myUser.name,
                     style: const TextStyle(
@@ -132,17 +142,9 @@ class _ChatPostState extends State<ChatPost> {
                           ))
                     ],
                   ),
-                  BlocListener<LikesPostBloc, LikesPostState>(
-                    listener: (context, state) {
-                      if (state is LikesPostSuccess ||
-                          state is UnlikePostSuccess) {
-                        context.read<GetPostBloc>().add(GetPost());
-                      }
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Text('${widget.post.likes} lượt thích.'),
-                    ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Text('${widget.post.likes} lượt thích.'),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -150,7 +152,8 @@ class _ChatPostState extends State<ChatPost> {
                         onTap: () {
                           buildShowModalBottomSheet(context);
                         },
-                        child: Text('${widget.post.numberComments} bình luận.')),
+                        child:
+                            Text('${widget.post.numberComments} bình luận.')),
                   ),
                 ],
               )
@@ -163,33 +166,28 @@ class _ChatPostState extends State<ChatPost> {
 
   Future<dynamic> buildShowModalBottomSheet(BuildContext context) {
     return showModalBottomSheet(
-                              isScrollControlled: true,
-                              context: context,
-                              isDismissible: true,
-                              builder: (BuildContext context) {
-                                return MultiBlocProvider(
-                                  providers: [
-                                    BlocProvider(
-                                      create: (context) =>
-                                          CreateCommentPostBloc(
-                                              myCommentRepository:
-                                                  FirebaseCommentRepository(),
-                                              myPostRepository:
-                                                  FireBasePostRepository()),
-                                    ),
-                                    BlocProvider(
-                                      create: (context) => GetCommentPostBloc(
-                                          myCommentRepository:
-                                              FirebaseCommentRepository())
-                                        ..add(GetCommentPost(
-                                            postId: widget.post.postID)),
-                                    ),
-                                  ],
-                                  child: CommentBottomSheetScreen(
-                                    myUser: widget.myUser,
-                                    post: widget.post,
-                                  ),
-                                );
-                              });
+        isScrollControlled: true,
+        context: context,
+        isDismissible: true,
+        builder: (BuildContext context) {
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => CreateCommentPostBloc(
+                    myCommentRepository: FirebaseCommentRepository(),
+                    myPostRepository: FireBasePostRepository()),
+              ),
+              BlocProvider(
+                create: (context) => GetCommentPostBloc(
+                    myCommentRepository: FirebaseCommentRepository())
+                  ..add(GetCommentPostPush(postId: widget.post.postID)),
+              ),
+            ],
+            child: CommentBottomSheetScreen(
+              myUser: widget.myUser,
+              post: widget.post,
+            ),
+          );
+        });
   }
 }

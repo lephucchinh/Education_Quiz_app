@@ -19,3 +19,8 @@ class DeleteCommentPostSuccess extends DeleteCommentPostState {
   List<Object?> get props => [];
 
 }
+class DeleteCommentPostFailure extends DeleteCommentPostState {
+  @override
+  List<Object?> get props => [];
+
+}

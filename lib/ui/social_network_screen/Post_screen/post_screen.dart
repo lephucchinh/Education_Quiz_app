@@ -38,7 +38,6 @@ class _PostScreenState extends State<PostScreen> {
       child: BlocListener<CreatePostBloc, CreatePostState>(
         listener: (context, state) async {
           if (state is CreatePostSuccess)  {
-            context.read<GetPostBloc>().add(GetPost());
             Navigator.pop(context);
           }
         },

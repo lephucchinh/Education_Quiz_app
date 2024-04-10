@@ -1,43 +1,64 @@
+
 import 'package:flutter/material.dart';
+import 'package:user_repository/user_repository.dart';
+
+import '../chat_private_screen/chat_private_screen.dart';
 
 class UserListTile extends StatelessWidget {
-  const UserListTile({super.key});
+  final MyUser myUser;
+
+  const UserListTile({super.key, required this.myUser, });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        width: double.infinity,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ListTile(
-            leading: Container(
-              width: 50,
-              height: 50,
-              decoration: BoxDecoration(
-                color: Colors.grey,
-                shape: BoxShape.circle,
-                image: DecorationImage(
-                    image: NetworkImage(
-                        "https://www.google.com/url?sa=i&url=https%3A%2F%2Frdsic.edu.vn%2Fblog%2Ftoan%2Fnhung-hinh-nen-dep-avatar-tuyet-voi-ban-khong-the-bo-qua-vi-cb.html&psig=AOvVaw0BcTXy4gNR8rfkWGPr0hAD&ust=1710172938230000&source=images&cd=vfe&opi=89978449&ved=0CBMQjRxqFwoTCNjK-OWI6oQDFQAAAAAdAAAAABAa"),
-                    fit: BoxFit.fill),
-              ),
-            ),
-            title: Text('name'),
-            subtitle: Text('new chat'),
-            trailing: Container(
-              width: 10,
-              height: 10,
-              decoration: BoxDecoration(
-                color: Colors.lightGreen,
-                borderRadius: BorderRadius.circular(20),
+    return Column(
+      children: [
+        InkWell(
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (_) => ChatPrivateScreen()));
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Container(
+              width: double.infinity,
+              child: ListTile(
+                leading:  myUser.picture!.isNotEmpty
+                    ? Container(
+                  width: 50,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: Colors.grey,
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      image: NetworkImage(myUser.picture!), // Sử dụng myUser.picture! để tránh lỗi khi giá trị là null
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                )
+                    : Container(
+                  width: 50,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: Colors.grey,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+                title: Text(myUser.name),
+                subtitle: Text('new chat'),
+                trailing: Container(
+                  width: 10,
+                  height: 10,
+                  decoration: BoxDecoration(
+                    color: Colors.lightGreen,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
               ),
             ),
           ),
         ),
-      ),
+        Divider(color: Colors.grey,),
+      ],
     );
-    ;
   }
 }

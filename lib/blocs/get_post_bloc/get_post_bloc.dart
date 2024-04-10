@@ -11,20 +11,36 @@ part 'get_post_state.dart';
 
 class GetPostBloc extends Bloc<GetPostEvent, GetPostState> {
   final PostRepository _postRepository;
+    StreamSubscription<List<Post>>? _streamPostSubscription;
 
   GetPostBloc({required PostRepository myPostRepository})
       : _postRepository = myPostRepository,
         super(GetPostInitial()) {
+
     on<GetPost>(_onGetPost);
+    on<StreamGetPost>(_onStreamGetPost);
   }
+
+  _onStreamGetPost(StreamGetPost event , Emitter<GetPostState> emit) {
+    _streamPostSubscription = _postRepository.getPost().listen((event) {
+      add(GetPost(posts: event));
+
+    });
+  }
+
 
   _onGetPost(GetPost event, Emitter<GetPostState> emit) async {
     try {
-      List<Post> posts = await _postRepository.getPost();
-      emit(GetPostSuccess(posts: posts));
+      emit(GetPostSuccess(posts: event.posts));
     } catch (e) {
       log(e.toString());
       emit(GetPostFailure());
     }
+  }
+
+  @override
+  Future<void> close() {
+    _streamPostSubscription!.cancel();
+    return super.close();
   }
 }

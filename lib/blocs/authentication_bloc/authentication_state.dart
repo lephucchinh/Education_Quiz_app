@@ -6,7 +6,8 @@ enum AuthenticationStatus {authenticated, unauthenticated,unknown}
   final AuthenticationStatus status;
   final User? user;
 
-  const AuthenticationState._({this.status = AuthenticationStatus.unknown, this.user});
+  const AuthenticationState._({
+   this.status = AuthenticationStatus.unknown, this.user});
 
 
   /// No information about the [AuthenticationStatus] of the current user

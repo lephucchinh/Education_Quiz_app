@@ -11,7 +11,9 @@ import 'package:quizgames/ui/social_network_screen/Post_screen/post_screen.dart'
 import 'package:quizgames/ui/social_network_screen/widget/chat_post.dart';
 import 'package:user_repository/user_repository.dart';
 
+import '../../blocs/authentication_bloc/authentication_bloc.dart';
 import '../../blocs/create_post_bloc/create_post_bloc.dart';
+import '../../blocs/get_all_user_chat/get_all_user_bloc.dart';
 
 class SocialNetworkScreen extends StatefulWidget {
   final MyUser myUser;
@@ -62,7 +64,14 @@ class _SocialNetworkScreenState extends State<SocialNetworkScreen> {
             heroTag: null,
             onPressed: () {
               Navigator.push(
-                  context, MaterialPageRoute(builder: (_) => ChatScreen()));
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => BlocProvider(
+                            create: (context) => GetAllUserBloc(
+
+                                myUserRepository: context.read<AuthenticationBloc>().userRepository,),
+                            child: ChatScreen(),
+                          )));
             },
             child: const Icon(Icons.message_outlined),
           ),
@@ -79,41 +88,33 @@ class _SocialNetworkScreenState extends State<SocialNetworkScreen> {
         title: const Text("Post global"),
         centerTitle: true,
       ),
-      body: BlocListener<DeletePostBloc, DeletePostState>(
-        listener: (context, state) {
-          if (state is DeletePostSuccess) {
-            setState(() {
-              context.read<GetPostBloc>().add(GetPost());
-            });
+      body: BlocBuilder<GetPostBloc, GetPostState>(
+        builder: (context, state) {
+          if (state is GetPostSuccess) {
+            return ListView.builder(
+              itemCount: state.posts.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Column(
+                  children: [
+                    ChatPost(
+                      post: state.posts[index],
+                      myUser: widget.myUser,
+                    ),
+                    if (index == state.posts.length - 1)
+                      SizedBox(
+                        height: 150,
+
+                      ),
+                  ],
+                );
+              },
+            );
+          } else {
+            return const Center(
+              child: Text("An error has occured"),
+            );
           }
         },
-        child: BlocBuilder<GetPostBloc, GetPostState>(
-          builder: (context, state) {
-            if (state is GetPostSuccess) {
-              return ListView.builder(
-                itemCount: state.posts.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Column(
-                    children: [
-                      ChatPost(
-                        post: state.posts[index],
-                        myUser:  widget.myUser,
-                      ),
-                      if (index == state.posts.length - 1)
-                        SizedBox(
-                          height: 150,
-                        ),
-                    ],
-                  );
-                },
-              );
-            }  else {
-              return const Center(
-                child: Text("An error has occured"),
-              );
-            }
-          },
-        ),
       ),
     );
   }

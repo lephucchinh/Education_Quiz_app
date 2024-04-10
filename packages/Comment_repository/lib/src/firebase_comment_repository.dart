@@ -27,27 +27,16 @@ class FirebaseCommentRepository implements CommentRepository {
     }
   }
 
+
+
   @override
-  Future<List<Comment>> getComment(String postID) async {
+  Future<void> deleteComment(String commentID,String postID) async {
     try {
-      return await commentCollection
-          .doc(postID)
-          .collection("comment_In_Post")
-          .orderBy('createAt', descending: true)
-          .get()
-          .then((value) => value.docs
-              .map((e) =>
-                  Comment.fromEntity(CommentEntity.fromDocument(e.data())))
-              .toList());
+      commentCollection.doc(postID).collection('comment_In_Post').doc(commentID).delete();
     } catch (e) {
       log(e.toString());
       rethrow;
     }
-  }
-
-  @override
-  Future<void> deleteComment(String userID) {
-    throw UnimplementedError();
   }
 
   @override
@@ -115,4 +104,19 @@ class FirebaseCommentRepository implements CommentRepository {
       rethrow;
     }
   }
+
+  @override
+  Stream<List<Comment>> allComment(String postID) {
+    return commentCollection
+        .doc(postID)
+        .collection("comment_In_Post")
+        .orderBy('createAt', descending: true)
+        .snapshots()
+        .map((value) => value.docs
+        .map((e) =>
+        Comment.fromEntity(CommentEntity.fromDocument(e.data())))
+        .toList());
+  }
+
+
 }

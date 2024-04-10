@@ -4,11 +4,22 @@ abstract class GetCommentPostEvent extends Equatable {
   const GetCommentPostEvent();
 }
 
-class GetCommentPost extends GetCommentPostEvent {
+class GetCommentPostPush extends GetCommentPostEvent {
   final String postId;
 
-  const GetCommentPost({required this.postId});
+  const GetCommentPostPush({required this.postId});
   @override
   List<Object?> get props => [postId];
 
 }
+class GetCommentPostPop extends GetCommentPostEvent {
+  final List<Comment> listComments;
+
+  const GetCommentPostPop({required this.listComments});
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [listComments];
+
+}
+

@@ -39,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton(
         heroTag: null,
         onPressed: () async {
-          context.read<GetPostBloc>().add(GetPost());
+          context.read<GetPostBloc>().add(StreamGetPost());
           Navigator.push(
               context,
               MaterialPageRoute(

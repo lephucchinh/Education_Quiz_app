@@ -25,4 +25,7 @@ abstract class UserRepository {
 
   Future<List<Map<String, dynamic>>> fetchAllUsers();
 
+  Stream<List<MyUser>> get allUsers;
+
+
 }
