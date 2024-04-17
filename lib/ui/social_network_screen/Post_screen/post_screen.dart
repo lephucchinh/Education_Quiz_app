@@ -1,7 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:post_repository/post_repository.dart';
+import 'package:quizgames/blocs/create_image_post_bloc/create_image_post_bloc.dart';
 import 'package:quizgames/blocs/create_post_bloc/create_post_bloc.dart';
+import 'package:quizgames/ui/social_network_screen/Post_screen/widget/post_image_screen.dart';
 
 import '../../../blocs/get_post_bloc/get_post_bloc.dart';
 
@@ -19,17 +24,17 @@ class _PostScreenState extends State<PostScreen> {
   final postController = TextEditingController();
   bool _buttonEnabled = true;
 
-
   @override
   void initState() {
     post = Post.empty;
     post = widget.post;
+    post.picture  = '';
+    post.type  = '';
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-
     final Size size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () {
@@ -37,7 +42,7 @@ class _PostScreenState extends State<PostScreen> {
       },
       child: BlocListener<CreatePostBloc, CreatePostState>(
         listener: (context, state) async {
-          if (state is CreatePostSuccess)  {
+          if (state is CreatePostSuccess) {
             Navigator.pop(context);
           }
         },
@@ -50,6 +55,51 @@ class _PostScreenState extends State<PostScreen> {
                   Navigator.pop(context);
                 },
                 icon: Icon(Icons.arrow_back_ios_new)),
+            actions: [
+              IconButton(
+                  onPressed: () async {
+                    final ImagePicker picker = ImagePicker();
+                    final XFile? image =
+                        await picker.pickImage(source: ImageSource.camera);
+                    if (image != null)
+                       {
+                         Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => BlocProvider(
+                                      create: (context) => CreateImagePostBloc(
+                                          myPostRepository:
+                                              FireBasePostRepository()),
+                                      child: PostImageScreen(
+                                        image: image.path,
+                                        post: widget.post,
+                                      ),
+                                    )));
+                      };
+                  },
+                  icon: Icon(Icons.camera_alt)),
+              IconButton(
+                  onPressed: () async {
+                    final ImagePicker picker = ImagePicker();
+                    final List<XFile?> image =
+                        await picker.pickMultiImage(imageQuality: 70);
+                    for (var i in image) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => BlocProvider(
+                                create: (context) => CreateImagePostBloc(
+                                    myPostRepository:
+                                    FireBasePostRepository()),
+                                child: PostImageScreen(
+                                  image: i!.path,
+                                  post: widget.post,
+                                ),
+                              )));
+                    }
+                  },
+                  icon: Icon(Icons.image)),
+            ],
           ),
           body: SingleChildScrollView(
             child: Center(
@@ -82,7 +132,7 @@ class _PostScreenState extends State<PostScreen> {
                   ),
                   MaterialButton(
                     onPressed: () {
-                      if(_buttonEnabled){
+                      if (_buttonEnabled) {
                         if (postController.text.length != 0) {
                           setState(() {
                             _buttonEnabled = false;

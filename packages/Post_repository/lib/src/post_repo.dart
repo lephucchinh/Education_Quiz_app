@@ -1,4 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:async';
+
 
 import '../post_repository.dart';
 
@@ -10,4 +11,5 @@ abstract class PostRepository {
   Future<void> unlikesPost(String postID , String userID );
   Future<void> increaseNumberComment(String postID);
   Future<void> decreaseNumberComment(String postID);
+  Future<void> uploadPicture(String picture,Post post);
 }

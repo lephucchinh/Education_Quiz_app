@@ -39,57 +39,71 @@ class _ChatPostState extends State<ChatPost> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Card(
-                child: ListTile(
-                  leading: widget.post.myUser.picture!.isNotEmpty
-                      ? Container(
-                          width: 50,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            color: Colors.grey,
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                                image:
-                                    NetworkImage(widget.post.myUser.picture!),
-                                fit: BoxFit.fill),
-                          ),
-                        )
-                      : Container(
-                          width: 50,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            color: Colors.grey,
-                            shape: BoxShape.circle,
+                child: Container(
+                  child: Column(
+                    children: [
+                      ListTile(
+                        leading: widget.post.myUser.picture!.isNotEmpty
+                            ? Container(
+                                width: 50,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey,
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                      image:
+                                          NetworkImage(widget.post.myUser.picture!),
+                                      fit: BoxFit.fill),
+                                ),
+                              )
+                            : Container(
+                                width: 50,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey,
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                        title: Text(
+                                widget.post.myUser.name,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 18),
+                              ),
+                        trailing: Visibility(
+                          visible:
+                              context.read<AuthenticationBloc>().state.user?.uid ==
+                                  widget.post.myUser.id,
+                          child: IconButton(
+                            onPressed: () {
+                              context.read<DeletePostBloc>().add(DeletePost(
+                                  postID: widget.post.postID,
+                                  myId: widget.post.myUser.id));
+                            },
+                            icon: const Icon(Icons.delete_outline),
                           ),
                         ),
-                  title: Text(
-                    widget.post.myUser.name,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 18),
+                        subtitle: Text(
+                          DateFormat('yyyy-MM-dd').format(widget.post.createAt),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 25,vertical: 10),
+                        width: Size.infinite.width,
+                        child: Text(
+                          widget.post.post,
+                          textAlign: TextAlign.start,
+                        ),
+                      ),
+                      widget.post.type == "image" ? Container(
+                        width: Size.infinite.width,
+                        height: 400,
+                        margin: EdgeInsets.symmetric(vertical: 10),
+                          child: Image.network(widget.post.picture)
+                      ) : Container(),
+
+                    ],
                   ),
-                  trailing: Visibility(
-                    visible:
-                        context.read<AuthenticationBloc>().state.user?.uid ==
-                            widget.post.myUser.id,
-                    child: IconButton(
-                      onPressed: () {
-                        context.read<DeletePostBloc>().add(DeletePost(
-                            postID: widget.post.postID,
-                            myId: widget.post.myUser.id));
-                      },
-                      icon: const Icon(Icons.delete_outline),
-                    ),
-                  ),
-                  subtitle: Text(
-                    DateFormat('yyyy-MM-dd').format(widget.post.createAt),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 10),
-                // color: Colors.amber,
-                child: Text(
-                  widget.post.post,
                 ),
               ),
               const SizedBox(height: 10),

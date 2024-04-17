@@ -10,17 +10,19 @@ class Post {
   int likes;
   List<String> likedBy;
   int numberComments;
+  String type;
+  String picture;
 
-
-  Post({
-    required this.postID,
-    required this.post,
-    required this.createAt,
-    required this.myUser,
-    required this.likes,
-    required this.likedBy,
-    required this.numberComments
-  });
+  Post(
+      {required this.postID,
+      required this.post,
+      required this.createAt,
+      required this.myUser,
+      required this.likes,
+      required this.likedBy,
+      required this.numberComments,
+      required this.type,
+      required this.picture});
 
   // Empty user which is represents an authenticated user
   static final empty = Post(
@@ -31,18 +33,21 @@ class Post {
     likes: 0,
     likedBy: List<String>.empty().toList(),
     numberComments: 0,
+    type: '',
+    picture: '',
   );
 
   // modify MyUser parameters
-  Post copyWith({
-    String? postID,
-    String? post,
-    MyUser? myUser,
-    DateTime? createAt,
-    int? likes,
-    List<String>? likedBy,
-    int? numberComments,
-  }) {
+  Post copyWith(
+      {String? postID,
+      String? post,
+      MyUser? myUser,
+      DateTime? createAt,
+      int? likes,
+      List<String>? likedBy,
+      int? numberComments,
+      String? type,
+      String? picture}) {
     return Post(
       postID: postID ?? this.postID,
       post: post ?? this.post,
@@ -51,6 +56,8 @@ class Post {
       likes: likes ?? this.likes,
       likedBy: likedBy ?? this.likedBy,
       numberComments: numberComments ?? this.numberComments,
+      type: type ?? this.type,
+      picture: picture ?? this.picture,
     );
   }
 
@@ -69,6 +76,8 @@ class Post {
       likes: likes,
       likedBy: likedBy,
       numberComments: numberComments,
+      type: type,
+      picture: picture,
     );
   }
 
@@ -81,8 +90,20 @@ class Post {
       likes: entity.likes,
       likedBy: entity.likedBy,
       numberComments: entity.numberComments,
+      type: entity.type,
+      picture: entity.picture,
     );
   }
 
-  List<Object?> get props => [postID, myUser, post,createAt,likes,likedBy,numberComments];
+  List<Object?> get props => [
+        postID,
+        myUser,
+        post,
+        createAt,
+        likes,
+        likedBy,
+        numberComments,
+        type,
+        picture
+      ];
 }

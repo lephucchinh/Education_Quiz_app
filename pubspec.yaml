@@ -62,6 +62,8 @@ dependencies:
     path: packages/post_repository
   comment_repository:
     path: packages/comment_repository
+  chat_repository:
+    path: packages/chat_repository
 
 
   # The following adds the Cupertino Icons font to your application.

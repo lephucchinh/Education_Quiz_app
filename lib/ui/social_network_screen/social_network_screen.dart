@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:post_repository/post_repository.dart';
+import 'package:quizgames/blocs/create_image_post_bloc/create_image_post_bloc.dart';
 import 'package:quizgames/blocs/delete_post_bloc/delete_post_bloc.dart';
 import 'package:quizgames/blocs/delete_post_bloc/delete_post_bloc.dart';
 import 'package:quizgames/blocs/get_post_bloc/get_post_bloc.dart';
@@ -68,9 +69,13 @@ class _SocialNetworkScreenState extends State<SocialNetworkScreen> {
                   MaterialPageRoute(
                       builder: (_) => BlocProvider(
                             create: (context) => GetAllUserBloc(
-
-                                myUserRepository: context.read<AuthenticationBloc>().userRepository,),
-                            child: ChatScreen(),
+                              myUserRepository: context
+                                  .read<AuthenticationBloc>()
+                                  .userRepository,
+                            ),
+                            child: ChatScreen(
+                              myUser: widget.myUser,
+                            ),
                           )));
             },
             child: const Icon(Icons.message_outlined),
@@ -103,7 +108,6 @@ class _SocialNetworkScreenState extends State<SocialNetworkScreen> {
                     if (index == state.posts.length - 1)
                       SizedBox(
                         height: 150,
-
                       ),
                   ],
                 );

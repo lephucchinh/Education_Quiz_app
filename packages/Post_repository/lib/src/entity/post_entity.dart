@@ -9,6 +9,8 @@ class PostEntity {
   int likes;
   int numberComments;
   List<String> likedBy;
+  String type;
+  String picture;
 
   PostEntity({
     required this.post,
@@ -18,6 +20,8 @@ class PostEntity {
     required this.likes,
     required this.likedBy,
     required this.numberComments,
+    required this.type,
+    required this.picture
   });
 
   Map<String, Object?> toDocument() {
@@ -29,6 +33,8 @@ class PostEntity {
       'likes' : likes,
       'likedBy' : likedBy,
       'numberComments' : numberComments,
+      'type' : type,
+      'picture' : picture
     };
   }
 
@@ -44,11 +50,13 @@ class PostEntity {
         likes: doc["likes"] as int,
       likedBy: List<String>.from(doc['likedBy']) ?? [],
         numberComments: doc["numberComments"] as int,
+      type: doc['type'] as String,
+      picture: doc['picture'] as String,
     );
   }
 
   @override
-  List<Object?> get props => [postID, myUser, post, createAt,likedBy,numberComments];
+  List<Object?> get props => [postID, myUser, post, createAt,likedBy,numberComments,type,picture];
 
   @override
   String toString() {
@@ -60,6 +68,8 @@ class PostEntity {
       likes: $likes
       likedBy: $likedBy
       numberComments: $numberComments
+      picture: $picture
+      type: $type
     }''';
   }
 }

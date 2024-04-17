@@ -47,7 +47,7 @@ class _DisplayState extends State<Display> {
                 ],
               ),
               state.user!.picture == ""
-                  ? GestureDetector(
+                  ? InkWell(
                       onTap: () async {
                         // sử dụng ImagePicker để truy cập vào file ảnh
                         final ImagePicker picker = ImagePicker();
@@ -105,18 +105,67 @@ class _DisplayState extends State<Display> {
                             color: Colors.grey.shade400),
                       ),
                     )
-                  : Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                          color: Colors.grey,
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                              image: NetworkImage(
-                                state.user!.picture!,
-                              ),
-                              fit: BoxFit.cover)),
-                    ),
+                  : InkWell(
+                    onTap: () async {
+                  // sử dụng ImagePicker để truy cập vào file ảnh
+                  final ImagePicker picker = ImagePicker();
+                  final XFile? image = await picker.pickImage(
+                      source: ImageSource.gallery,
+                      maxHeight: 500,
+                      maxWidth: 500,
+                      imageQuality: 40);
+                  if (image == null) {
+                    return;
+                  } else {
+                    CroppedFile? croppedFile = await ImageCropper()
+                        .cropImage(
+                        sourcePath: image.path,
+                        aspectRatio: const CropAspectRatio(
+                            ratioX: 1, ratioY: 1),
+                        aspectRatioPresets: [
+                          CropAspectRatioPreset.square,
+                        ],
+                        uiSettings: [
+                          AndroidUiSettings(
+                            toolbarTitle: 'Cropper',
+                            toolbarColor:
+                            Theme.of(context).colorScheme.primary,
+                            toolbarWidgetColor: Colors.white,
+                            initAspectRatio:
+                            CropAspectRatioPreset.original,
+                            lockAspectRatio: false,
+                          ),
+                          IOSUiSettings(
+                            title: 'Cropper',
+                          ),
+                        ]);
+                    if (croppedFile != null) {
+                      setState(() {
+                        context.read<UpdateUserInfoBloc>().add(
+                            UpdatePicture(
+                                file: croppedFile.path,
+                                userId: context
+                                    .read<MyUserBloc>()
+                                    .state
+                                    .user!
+                                    .id));
+                      });
+                    }
+                  }
+                },
+                    child: Container(
+                        width: 50,
+                        height: 50,
+                        decoration: BoxDecoration(
+                            color: Colors.grey,
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                                image: NetworkImage(
+                                  state.user!.picture!,
+                                ),
+                                fit: BoxFit.cover)),
+                      ),
+                  ),
             ],
           );
         } else {

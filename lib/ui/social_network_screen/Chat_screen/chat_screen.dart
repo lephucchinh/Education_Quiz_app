@@ -7,7 +7,8 @@ import 'package:quizgames/ui/social_network_screen/Chat_screen/widgets/user_list
 import 'package:user_repository/user_repository.dart';
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({super.key});
+  final MyUser myUser;
+  const ChatScreen({super.key, required this.myUser});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -42,7 +43,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   itemCount: state.listUsers.length,
                   shrinkWrap: true,
                   itemBuilder: (BuildContext context, int index) {
-                    return UserListTile(myUser: state.listUsers[index],
+                    return UserListTile(user: state.listUsers[index], myUser: widget.myUser,
                     );
                   },
 

@@ -1,6 +1,10 @@
+import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:comment_repository/comment_repository.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:post_repository/post_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -10,12 +14,12 @@ import 'post_repo.dart';
 
 class FireBasePostRepository implements PostRepository {
   final postCollection = FirebaseFirestore.instance.collection('Posts');
+
   @override
   Future<Post> createPost(Post post) async {
     try {
       post.postID = const Uuid().v1();
       post.createAt = DateTime.now();
-
       await postCollection.doc(post.postID).set(post.toEntity().toDocument());
       return post;
     } catch (e) {
@@ -23,18 +27,23 @@ class FireBasePostRepository implements PostRepository {
       rethrow;
     }
   }
+
   @override
   Stream<List<Post>> getPost() {
     try {
-      return postCollection.orderBy('createAt', descending: true).snapshots().map(
-              (snapshot) => snapshot.docs
-              .map((doc) => Post.fromEntity(PostEntity.fromDocument(doc.data())))
+      return postCollection
+          .orderBy('createAt', descending: true)
+          .snapshots()
+          .map((snapshot) => snapshot.docs
+              .map(
+                  (doc) => Post.fromEntity(PostEntity.fromDocument(doc.data())))
               .toList());
     } catch (e) {
       log(e.toString());
       rethrow;
     }
   }
+
   @override
   Future<void> deletePost(String postID) async {
     try {
@@ -48,6 +57,10 @@ class FireBasePostRepository implements PostRepository {
           doc.reference.delete();
         });
       });
+
+      Reference firebaseStoreRef =
+          FirebaseStorage.instance.ref().child("postImage/${postID}_lead");
+      await firebaseStoreRef.delete();
 
 // Sau khi xóa tất cả các documents con, bạn có thể xóa document cha
       await FirebaseFirestore.instance
@@ -69,6 +82,7 @@ class FireBasePostRepository implements PostRepository {
       rethrow;
     }
   }
+
   @override
   Future<void> likesPost(String postID, String userID) async {
     try {
@@ -85,6 +99,7 @@ class FireBasePostRepository implements PostRepository {
       rethrow;
     }
   }
+
   @override
   Future<void> unlikesPost(String postID, String userID) async {
     try {
@@ -103,6 +118,7 @@ class FireBasePostRepository implements PostRepository {
       rethrow;
     }
   }
+
   @override
   Future<void> increaseNumberComment(String postID) async {
     try {
@@ -122,11 +138,30 @@ class FireBasePostRepository implements PostRepository {
   Future<void> decreaseNumberComment(String postID) async {
     try {
       Post post = await postCollection.doc(postID).get().then(
-              (value) => Post.fromEntity(PostEntity.fromDocument(value.data()!)));
+          (value) => Post.fromEntity(PostEntity.fromDocument(value.data()!)));
       int numberComment = post.numberComments - 1;
       await postCollection
           .doc(postID)
           .update({"numberComments": numberComment});
+    } catch (e) {
+      log(e.toString());
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> uploadPicture(String picture, Post post) async {
+    try {
+      post.postID = const Uuid().v1();
+      post.createAt = DateTime.now();
+      File file = File(picture);
+      Reference firebaseStoreRef =
+          FirebaseStorage.instance.ref().child('postImage/${post.postID}_lead');
+      await firebaseStoreRef.putFile(file);
+      String url = await firebaseStoreRef.getDownloadURL();
+      post.picture = url;
+      post.type = 'image';
+      await postCollection.doc(post.postID).set(post.toEntity().toDocument());
     } catch (e) {
       log(e.toString());
       rethrow;
