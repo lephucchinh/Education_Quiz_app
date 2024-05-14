@@ -7,7 +7,7 @@ abstract class UserRepository {
 
   Future<void> signIn(String email, String password);
 
-  Future<void> logOut();
+  Future<void> logOut(String myUserId);
 
   Future<MyUser> signUp(MyUser myUser, String password);
 
@@ -27,5 +27,6 @@ abstract class UserRepository {
 
   Stream<List<MyUser>> get allUsers;
 
+  Future<void> updateOnline(String userId, bool isOnline);
 
 }

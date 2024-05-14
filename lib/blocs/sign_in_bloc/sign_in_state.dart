@@ -6,7 +6,6 @@ class SignInState extends Equatable {
   @override
   List<Object?> get props => [];
 }
-
 class SignInInitial extends SignInState {}
 
 class SignInSuccess extends SignInState {}

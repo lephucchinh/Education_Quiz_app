@@ -76,9 +76,10 @@ class _ChatPostState extends State<ChatPost> {
                           child: IconButton(
                             onPressed: () {
                               context.read<DeletePostBloc>().add(DeletePost(
-                                  postID: widget.post.postID,
+                                  post: widget.post,
                                   myId: widget.post.myUser.id));
                             },
+
                             icon: const Icon(Icons.delete_outline),
                           ),
                         ),

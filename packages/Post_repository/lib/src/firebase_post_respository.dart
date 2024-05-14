@@ -1,12 +1,16 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
 import 'package:comment_repository/comment_repository.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:http/http.dart';
 import 'package:post_repository/post_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:user_repository/user_repository.dart';
 
 import 'package:uuid/uuid.dart';
 
@@ -14,6 +18,7 @@ import 'post_repo.dart';
 
 class FireBasePostRepository implements PostRepository {
   final postCollection = FirebaseFirestore.instance.collection('Posts');
+  final notification = FirebaseMessaging.instance;
 
   @override
   Future<Post> createPost(Post post) async {
@@ -45,11 +50,11 @@ class FireBasePostRepository implements PostRepository {
   }
 
   @override
-  Future<void> deletePost(String postID) async {
+  Future<void> deletePost(Post post) async {
     try {
       await FirebaseFirestore.instance
           .collection("Comments")
-          .doc(postID)
+          .doc(post.postID)
           .collection("comment_In_Post")
           .get()
           .then((querySnapshot) {
@@ -58,17 +63,20 @@ class FireBasePostRepository implements PostRepository {
         });
       });
 
-      Reference firebaseStoreRef =
-          FirebaseStorage.instance.ref().child("postImage/${postID}_lead");
-      await firebaseStoreRef.delete();
+      if (post.picture != '') {
+        Reference firebaseStoreRef = FirebaseStorage.instance
+            .ref()
+            .child("postImage/${post.postID}_lead");
+        await firebaseStoreRef.delete();
+      }
 
 // Sau khi xóa tất cả các documents con, bạn có thể xóa document cha
       await FirebaseFirestore.instance
           .collection("Comments")
-          .doc(postID)
+          .doc(post.postID)
           .delete();
 
-      await postCollection.doc(postID).delete();
+      await postCollection.doc(post.postID).delete();
       // await postCollection
       //     .where("postID", isEqualTo: postID)
       //     .get()
@@ -164,6 +172,40 @@ class FireBasePostRepository implements PostRepository {
       await postCollection.doc(post.postID).set(post.toEntity().toDocument());
     } catch (e) {
       log(e.toString());
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> sendPushNotification(
+      List<MyUser?> myUsers, String title, String myToken) async {
+    try {
+      // URL và header phụ thuộc vào nhà cung cấp thông báo của bạn
+      final url = 'https://fcm.googleapis.com/fcm/send';
+      final headers = {
+        'Authorization': 'key=AAAAANeFT70:APA91bFMcXywgTpYWakCnVvH6uxLHoZrcX-ze1OuGAOVEKFXWVbRDzjRBSIouEzTSo3dUw_E211jQThb_eMGY-dCzfZ-HoAXPm2yLqXnPLbyKql9XfF-rtWmYx35qpsHMUoGiMmBvLqS',
+        'Content-Type': 'application/json',
+      };
+      log("đã hoạt động");
+      for(var myUser in  myUsers) {
+        log("đã check myUser");
+        if(myUser!.token != myToken ){
+          log("đã gửi notification");
+          final body = {
+            'to': myUser.token,
+            'notification': {
+              'title': 'Thông báo mới',
+              'body': "${title} đã đăng 1 tin mới",
+            },
+          };
+          final response =
+          await post(Uri.parse(url), headers: headers, body: jsonEncode(body));
+        }
+      }
+
+
+    } catch (e) {
+      log(e.toString() + "--------------------------------");
       rethrow;
     }
   }

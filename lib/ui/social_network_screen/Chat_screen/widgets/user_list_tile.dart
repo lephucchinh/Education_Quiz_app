@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quizgames/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:quizgames/blocs/create_message_bloc/create_message_bloc.dart';
+import 'package:quizgames/blocs/send_notification_message_bloc/send_notification_message_bloc.dart';
 import 'package:user_repository/user_repository.dart';
 
 import '../../../../blocs/get_message_bloc/get_message_bloc.dart';
@@ -14,7 +15,8 @@ class UserListTile extends StatefulWidget {
 
   const UserListTile({
     super.key,
-    required this.user, required this.myUser,
+    required this.user,
+    required this.myUser,
   });
 
   @override
@@ -35,7 +37,6 @@ class _UserListTileState extends State<UserListTile> {
                           providers: [
                             BlocProvider(
                               create: (context) => CreateMessageBloc(
-
                                   myChatRepository: FirebaseChatRepository()),
                             ),
                             BlocProvider(
@@ -52,9 +53,15 @@ class _UserListTileState extends State<UserListTile> {
                                         ? "${context.read<AuthenticationBloc>().state.user!.uid}_${widget.user.id}"
                                         : "${widget.user.id}_${context.read<AuthenticationBloc>().state.user!.uid}")),
                             ),
+                            BlocProvider(
+                                create: (context) =>
+                                    SendNotificationMessageBloc(
+                                        myChatRepository:
+                                            FirebaseChatRepository()))
                           ],
                           child: ChatPrivateScreen(
-                            user: widget.user, myUser: widget.myUser,
+                            user: widget.user,
+                            myUser: widget.myUser,
                           ),
                         )));
           },
@@ -91,7 +98,7 @@ class _UserListTileState extends State<UserListTile> {
                   width: 10,
                   height: 10,
                   decoration: BoxDecoration(
-                    color: Colors.lightGreen,
+                    color: widget.user.isOnline == true ?Colors.green :Colors.grey ,
                     borderRadius: BorderRadius.circular(20),
                   ),
                 ),

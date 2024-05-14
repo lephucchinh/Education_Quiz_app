@@ -47,10 +47,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         providers: [
                           BlocProvider(
                             create: (context) => DeletePostBloc(
-                                myPostRepository: FireBasePostRepository(),
-                                ),
+                              myPostRepository: FireBasePostRepository(),
+                            ),
                           ),
-
                         ],
                         child: SocialNetworkScreen(
                             myUser: context.read<MyUserBloc>().state.user!),
@@ -64,7 +63,9 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(
             onPressed: () {
-              context.read<SignInBloc>().add(SignOutRequired());
+              context.read<SignInBloc>().add(SignOutRequired(
+                  myUserId:
+                      context.read<AuthenticationBloc>().state.user!.uid));
             },
             icon: Icon(Icons.logout),
           )

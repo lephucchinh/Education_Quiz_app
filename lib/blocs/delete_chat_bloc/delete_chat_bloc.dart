@@ -19,7 +19,7 @@ class DeleteChatBloc extends Bloc<DeleteChatEvent, DeleteChatState> {
   _onDeleteChat(DeleteChat event , Emitter<DeleteChatState> emit) async {
     emit(DeleteChatProgress());
     try {
-      await _chatRepository.deleteChat(event.chatID, event.send);
+      await _chatRepository.deleteChat(event.chat, event.send);
       emit(DeleteChatSuccess());
     } catch (e) {
       log(e.toString());

@@ -4,11 +4,11 @@ sealed class DeleteChatEvent extends Equatable {
   const DeleteChatEvent();
 }
 class DeleteChat extends DeleteChatEvent {
-  final String chatID;
+  final Chat chat;
   final DateTime send;
 
-  const DeleteChat({required this.chatID, required this.send});
+  const DeleteChat({required this.chat, required this.send});
   @override
-  List<Object?> get props => [chatID,send];
+  List<Object?> get props => [chat,send];
 
 }

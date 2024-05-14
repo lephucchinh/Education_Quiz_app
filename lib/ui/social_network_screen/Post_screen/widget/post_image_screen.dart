@@ -6,6 +6,8 @@ import 'package:post_repository/post_repository.dart';
 import 'package:quizgames/blocs/create_post_bloc/create_post_bloc.dart';
 
 import '../../../../blocs/create_image_post_bloc/create_image_post_bloc.dart';
+import '../../../../blocs/get_all_user_chat/get_all_user_bloc.dart';
+import '../../../../blocs/send_push_notification_bloc/send_push_notification_bloc.dart';
 
 class PostImageScreen extends StatefulWidget {
   final String image;
@@ -27,7 +29,6 @@ class _PostImageScreenState extends State<PostImageScreen> {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
-
         appBar: AppBar(
           title: Text('Bài đăng'),
           leading: IconButton(
@@ -41,7 +42,12 @@ class _PostImageScreenState extends State<PostImageScreen> {
             margin: const EdgeInsets.symmetric(horizontal: 40),
             child: Column(
               children: [
-                Image.file(File(widget.image),width: 400,height: 300,),
+                Image.file(
+
+                  File(widget.image),
+                  width: 400,
+                  height: 300,
+                ),
                 const SizedBox(
                   height: 20,
                 ),
@@ -57,23 +63,37 @@ class _PostImageScreenState extends State<PostImageScreen> {
                     focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide(
-
                             color: Theme.of(context).colorScheme.primary)),
                   ),
                 ),
-                MaterialButton(
-                  color: Colors.blueAccent,
-                    onPressed: () async {
+                BlocBuilder<GetAllUserBloc, GetAllUserState>(
+                  builder: (context, state) {
+                    return MaterialButton(
+                        color: Colors.blueAccent,
+                        onPressed: () async {
+                          widget.post.post = postController.text;
+                          context
+                              .read<CreateImagePostBloc>()
+                              .add(CreateImagePost(
+                                picture: widget.image,
+                                post: widget.post,
+                              ));
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                          if(state is GetAllUserSuccess) {
+                            context.read<SendPushNotificationBloc>().add(
+                                SendPushNotification(
 
-                      widget.post.post = postController.text;
-                      context.read<CreateImagePostBloc>().add(CreateImagePost(
-                            picture: widget.image,
-                            post: widget.post,
-                          ));
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Post',style: TextStyle(color: Colors.white),))
+                                    myUsers: state.listUsers, post: widget.post));
+                          }
+                        },
+
+                        child: const Text(
+                          'Post',
+                          style: TextStyle(color: Colors.white),
+                        ));
+                  },
+                )
               ],
             ),
           ),

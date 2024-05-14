@@ -6,14 +6,18 @@ import 'package:image_picker/image_picker.dart';
 import 'package:post_repository/post_repository.dart';
 import 'package:quizgames/blocs/create_image_post_bloc/create_image_post_bloc.dart';
 import 'package:quizgames/blocs/create_post_bloc/create_post_bloc.dart';
+import 'package:quizgames/blocs/get_all_user_chat/get_all_user_bloc.dart';
+import 'package:quizgames/blocs/get_all_user_chat/get_all_user_bloc.dart';
+import 'package:quizgames/blocs/send_push_notification_bloc/send_push_notification_bloc.dart';
 import 'package:quizgames/ui/social_network_screen/Post_screen/widget/post_image_screen.dart';
+import 'package:user_repository/user_repository.dart';
 
 import '../../../blocs/get_post_bloc/get_post_bloc.dart';
 
 class PostScreen extends StatefulWidget {
   final Post post;
-
-  const PostScreen({super.key, required this.post});
+  final MyUser myUser;
+  const PostScreen({super.key, required this.post, required this.myUser});
 
   @override
   State<PostScreen> createState() => _PostScreenState();
@@ -28,8 +32,9 @@ class _PostScreenState extends State<PostScreen> {
   void initState() {
     post = Post.empty;
     post = widget.post;
-    post.picture  = '';
-    post.type  = '';
+    post.picture = '';
+    post.myUser.picture =  widget.myUser.picture;
+    post.type = '';
     super.initState();
   }
 
@@ -61,21 +66,21 @@ class _PostScreenState extends State<PostScreen> {
                     final ImagePicker picker = ImagePicker();
                     final XFile? image =
                         await picker.pickImage(source: ImageSource.camera);
-                    if (image != null)
-                       {
-                         Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => BlocProvider(
-                                      create: (context) => CreateImagePostBloc(
-                                          myPostRepository:
-                                              FireBasePostRepository()),
-                                      child: PostImageScreen(
-                                        image: image.path,
-                                        post: widget.post,
-                                      ),
-                                    )));
-                      };
+                    if (image != null) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => BlocProvider(
+                                    create: (context) => CreateImagePostBloc(
+                                        myPostRepository:
+                                            FireBasePostRepository()),
+                                    child: PostImageScreen(
+                                      image: image.path,
+                                      post: widget.post,
+                                    ),
+                                  )));
+                    }
+                    ;
                   },
                   icon: Icon(Icons.camera_alt)),
               IconButton(
@@ -88,14 +93,14 @@ class _PostScreenState extends State<PostScreen> {
                           context,
                           MaterialPageRoute(
                               builder: (_) => BlocProvider(
-                                create: (context) => CreateImagePostBloc(
-                                    myPostRepository:
-                                    FireBasePostRepository()),
-                                child: PostImageScreen(
-                                  image: i!.path,
-                                  post: widget.post,
-                                ),
-                              )));
+                                    create: (context) => CreateImagePostBloc(
+                                        myPostRepository:
+                                            FireBasePostRepository()),
+                                    child: PostImageScreen(
+                                      image: i!.path,
+                                      post: widget.post,
+                                    ),
+                                  )));
                     }
                   },
                   icon: Icon(Icons.image)),
@@ -130,22 +135,31 @@ class _PostScreenState extends State<PostScreen> {
                   const SizedBox(
                     height: 30,
                   ),
-                  MaterialButton(
-                    onPressed: () {
-                      if (_buttonEnabled) {
-                        if (postController.text.length != 0) {
-                          setState(() {
-                            _buttonEnabled = false;
-                            post.post = postController.text;
-                          });
-                          context
-                              .read<CreatePostBloc>()
-                              .add(CreatePost(post: post));
-                        }
-                      }
+                  BlocBuilder<GetAllUserBloc, GetAllUserState>(
+                    builder: (context, state) {
+                      return MaterialButton(
+                        onPressed: () {
+                          if (_buttonEnabled) {
+                            if (postController.text.length != 0) {
+                              setState(() {
+                                _buttonEnabled = false;
+                                post.post = postController.text;
+                              });
+                              context
+                                  .read<CreatePostBloc>()
+                                  .add(CreatePost(post: post));
+                              if(state is GetAllUserSuccess) {
+                                context.read<SendPushNotificationBloc>().add(
+                                    SendPushNotification(
+                                        myUsers: state.listUsers, post: post));
+                              }
+                            }
+                          }
+                        },
+                        child: const Text('Post'),
+                        color: Theme.of(context).colorScheme.primary,
+                      );
                     },
-                    child: const Text('Post'),
-                    color: Theme.of(context).colorScheme.primary,
                   )
                 ],
               ),

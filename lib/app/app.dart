@@ -7,11 +7,12 @@ import 'package:quizgames/services/total_coins.dart';
 
 import 'package:user_repository/user_repository.dart';
 
+import '../blocs/update_Online_User/update_online_user_bloc.dart';
 
 class MyApp extends StatelessWidget {
   final UserRepository userRepository;
 
-  const MyApp(this.userRepository,{super.key } );
+  const MyApp(this.userRepository, {super.key});
 
   // This widget is the root of your application.
   @override
@@ -25,7 +26,11 @@ class MyApp extends StatelessWidget {
         // RepositoryProvider(create: (_) => AuthenticationService()),
         // RepositoryProvider(create: (_) => TotalCoinsServices()),
       ],
-      child: MyAppView(),
+      child: BlocProvider(
+        create: (context) =>
+            UpdateOnlineUserBloc(myUserRepository: FireBaseUserRepository()),
+        child: MyAppView(),
+      ),
     );
   }
 }

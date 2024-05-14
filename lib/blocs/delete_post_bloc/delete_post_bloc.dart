@@ -23,7 +23,7 @@ class DeletePostBloc extends Bloc<DeletePostEvent, DeletePostState> {
   _onDeletePost(DeletePost event, Emitter<DeletePostState> emit) async {
     emit(DeletePostProgress());
     try {
-      await _postRepository.deletePost(event.postID);
+      await _postRepository.deletePost(event.post);
       emit(DeletePostSuccess());
     } catch (e) {
       log(e.toString());

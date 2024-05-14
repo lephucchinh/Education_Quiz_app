@@ -7,7 +7,7 @@ sealed class GetAllUserEvent extends Equatable {
 class GetAllUser extends GetAllUserEvent{
   final List<MyUser> listUsers;
 
-  GetAllUser({required this.listUsers});
+  const GetAllUser({required this.listUsers});
   @override
   List<Object?> get props => [listUsers];
 

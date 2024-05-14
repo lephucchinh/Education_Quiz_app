@@ -16,7 +16,11 @@ class SignInRequired extends SignInEvent {
 }
 
 class SignOutRequired extends SignInEvent {
+  final String myUserId;
+
+  const SignOutRequired({required this.myUserId});
+
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [myUserId];
 }
 

@@ -15,6 +15,7 @@ import 'package:user_repository/user_repository.dart';
 import '../../blocs/authentication_bloc/authentication_bloc.dart';
 import '../../blocs/create_post_bloc/create_post_bloc.dart';
 import '../../blocs/get_all_user_chat/get_all_user_bloc.dart';
+import '../../blocs/send_push_notification_bloc/send_push_notification_bloc.dart';
 
 class SocialNetworkScreen extends StatefulWidget {
   final MyUser myUser;
@@ -48,11 +49,16 @@ class _SocialNetworkScreenState extends State<SocialNetworkScreen> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (_) => BlocProvider(
-                            create: (context) => CreatePostBloc(
-                                myPostRepository: FireBasePostRepository()),
+                      builder: (_) => MultiBlocProvider(
+                            providers: [
+                              BlocProvider(
+                                create: (context) => CreatePostBloc(
+                                    myPostRepository: FireBasePostRepository()),
+                              ),
+                            ],
                             child: PostScreen(
                               post: post,
+                              myUser: widget.myUser,
                             ),
                           )));
             },
@@ -67,16 +73,9 @@ class _SocialNetworkScreenState extends State<SocialNetworkScreen> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (_) => BlocProvider(
-                            create: (context) => GetAllUserBloc(
-                              myUserRepository: context
-                                  .read<AuthenticationBloc>()
-                                  .userRepository,
-                            ),
-                            child: ChatScreen(
-                              myUser: widget.myUser,
-                            ),
-                          )));
+                      builder: (_) => ChatScreen(
+                        myUser: widget.myUser,
+                      )));
             },
             child: const Icon(Icons.message_outlined),
           ),

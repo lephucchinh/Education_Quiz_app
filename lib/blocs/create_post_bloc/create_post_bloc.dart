@@ -17,13 +17,13 @@ class CreatePostBloc extends Bloc<CreatePostEvent, CreatePostState> {
         super(CreatePostInitial()) {
     on<CreatePost>(_onCreatePost);
   }
-  _onCreatePost (CreatePost event , Emitter<CreatePostState> emit) async {
+
+  _onCreatePost(CreatePost event, Emitter<CreatePostState> emit) async {
     emit(CreatePostProgress());
     try {
-       Post post = await _postRepository.createPost(event.post);
+      Post post = await _postRepository.createPost(event.post);
       emit(CreatePostSuccess(post: post));
-    }
-    catch (e) {
+    } catch (e) {
       log(e.toString());
       emit(CreatePostFailure());
     }

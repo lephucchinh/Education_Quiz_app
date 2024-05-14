@@ -131,8 +131,6 @@ class _SignInScreenState extends State<SignInScreen> {
                                 password: passwordController.text));
 
                         }
-
-
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(

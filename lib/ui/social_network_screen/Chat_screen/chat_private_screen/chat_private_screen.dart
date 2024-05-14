@@ -7,6 +7,7 @@ import 'package:quizgames/blocs/create_message_bloc/create_message_bloc.dart';
 import 'package:quizgames/blocs/delete_chat_bloc/delete_chat_bloc.dart';
 import 'package:quizgames/blocs/get_message_bloc/get_message_bloc.dart';
 import 'package:quizgames/blocs/get_message_bloc/get_message_bloc.dart';
+import 'package:quizgames/blocs/send_notification_message_bloc/send_notification_message_bloc.dart';
 import 'package:quizgames/ui/social_network_screen/Chat_screen/chat_private_screen/widget/chat_card.dart';
 import 'package:user_repository/user_repository.dart';
 
@@ -115,8 +116,15 @@ class _ChatPrivateScreenState extends State<ChatPrivateScreen> {
                                 chat.read = DateTime.now();
                                 context.read<CreateMessageBloc>().add(
                                     CreateImageMessage(
-
                                         chat: chat, image: image.path));
+                                if (state is CreateMessageSuccess) {
+                                  context
+                                      .read<SendNotificationMessageBloc>()
+                                      .add(SendNotificationMessage(
+                                      token: widget.user.token!,
+                                      chat: chat,
+                                      name: widget.myUser.name));
+                                }
                               }
                             },
                             icon: Icon(Icons.camera_alt)),
@@ -140,6 +148,14 @@ class _ChatPrivateScreenState extends State<ChatPrivateScreen> {
                                 context.read<CreateMessageBloc>().add(
                                     CreateImageMessage(
                                         chat: chat, image: i!.path));
+                                if (state is CreateMessageSuccess) {
+                                  context
+                                      .read<SendNotificationMessageBloc>()
+                                      .add(SendNotificationMessage(
+                                      token: widget.user.token!,
+                                      chat: chat,
+                                      name: widget.myUser.name));
+                                }
                               }
                             },
                             icon: Icon(Icons.image)),
@@ -163,7 +179,7 @@ class _ChatPrivateScreenState extends State<ChatPrivateScreen> {
                         )),
                         IconButton(
                             onPressed: () {
-                              if (messageController.text.length != 0) {
+                              if (messageController.text.isNotEmpty) {
                                 FocusScope.of(context).unfocus();
                                 chat.chat = messageController.text;
                                 chat.chatID = "";
@@ -181,6 +197,14 @@ class _ChatPrivateScreenState extends State<ChatPrivateScreen> {
                                     .read<CreateMessageBloc>()
                                     .add(CreateMessage(chat: chat));
                                 messageController.text = '';
+                                if (state is CreateMessageSuccess) {
+                                  context
+                                      .read<SendNotificationMessageBloc>()
+                                      .add(SendNotificationMessage(
+                                          token: widget.user.token!,
+                                          chat: chat,
+                                          name: widget.myUser.name));
+                                }
                               }
                             },
                             icon: Icon(Icons.send)),

@@ -14,10 +14,12 @@ dependencies:
   # Firebase
 
   cupertino_icons: ^1.0.2
+  firebase_messaging: ^14.7.10
   equatable: ^2.0.5
   cloud_firestore: ^4.9.0
   uuid: ^4.3.3
   firebase_storage: ^11.6.5
+  http: ^1.2.0
 
 
   user_repository:

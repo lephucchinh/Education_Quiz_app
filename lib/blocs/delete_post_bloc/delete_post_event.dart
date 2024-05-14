@@ -5,11 +5,11 @@ abstract class DeletePostEvent extends Equatable {
 }
 
 class DeletePost extends DeletePostEvent {
-  final String postID;
+  final Post post;
   final String myId;
 
-  const DeletePost({required this.postID, required this.myId});
+  const DeletePost({required this.post, required this.myId});
   @override
-  List<Object?> get props => [postID,myId];
+  List<Object?> get props => [post,myId];
 
 }

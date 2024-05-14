@@ -41,8 +41,8 @@ class _ChatCardState extends State<ChatCard> {
                     TextButton(
                       onPressed: () {
                         context.read<DeleteChatBloc>().add(DeleteChat(
-                            chatID: widget.chat.chatID!,
-                            send: widget.chat.send));
+                            send: widget.chat.send,
+                            chat: widget.chat));
                         print(widget.chat.send.toIso8601String());
                         Navigator.pop(context);
                       },
